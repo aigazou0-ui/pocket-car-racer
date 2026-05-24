@@ -9,8 +9,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Pocket Car Racer</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/cars/shop/nsx.png">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="mobile-web-app-capable" content="yes">
   <style>
     :root {
       --ink: #f7f3d6;
@@ -2487,7 +2488,7 @@
     };
 
     const TOTAL_LAPS = 3;
-    const DRIVE_SPEED_SCALE = 0.5;
+    const DRIVE_SPEED_SCALE = 0.58;
     const WORLD_SCALE = 8;
     const STORAGE_PREFIX = "pocketPitRacer_best_";
     const OVERALL_BEST_KEY = "pocketPitRacer_best_overall";
@@ -5335,7 +5336,7 @@
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("sw.js").catch(() => {});
+        navigator.serviceWorker.register("service-worker.js").catch(() => {});
       });
     }
   </script>
