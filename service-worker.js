@@ -1,4 +1,4 @@
-const CACHE_NAME = "pocket-car-racer-pwa-v3";
+const CACHE_NAME = "pocket-car-racer-pwa-v5";
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -39,4 +39,4 @@ self.addEventListener("fetch", event => {
   );
 });
 
-// cache refresh v4
+// cache refresh v5
