@@ -3864,9 +3864,9 @@
         rankScore: 0,
         waypointIndex: 0,
         laneOffset,
-        // Much stricter car-to-car contact on mobile/PC.
-        // Visual car size stays the same, but racers touch earlier and cannot overlap as easily.
-        radius: kind === "player" ? 48 : 46,
+        // Car-to-car contact tuned one step back from the strongest setting.
+        // Visual car size stays the same, with a firm but not excessive collision range.
+        radius: kind === "player" ? 38 : 36,
         collisionCooldown: 0,
         avoidBias: 0,
         avoidBiasTimer: 0,
@@ -4160,11 +4160,11 @@
           const dx = b.x - a.x;
           const dy = b.y - a.y;
           const dist = Math.hypot(dx, dy);
-          const minDist = (a.radius + b.radius) * 1.18;
+          const minDist = (a.radius + b.radius) * 1.06;
           if (dist > 0 && dist < minDist) {
             const playerContact = a.kind === "player" || b.kind === "player";
             // Stricter contact: separate cars more clearly and reduce speed more on impact.
-            const push = (minDist - dist) / 2 + (playerContact ? 36 : 28);
+            const push = (minDist - dist) / 2 + (playerContact ? 26 : 18);
             const nx = dx / dist;
             const ny = dy / dist;
             a.x -= nx * push;
@@ -4172,9 +4172,9 @@
             b.x += nx * push;
             b.y += ny * push;
 
-            const bounceDamping = playerContact ? 0.16 : 0.15;
-            const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.30);
-            const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.30);
+            const bounceDamping = playerContact ? 0.20 : 0.19;
+            const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.38);
+            const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.38);
             a.moveAngle = Math.atan2(-ny, -nx);
             b.moveAngle = Math.atan2(ny, nx);
             a.angle = angleLerp(a.angle, a.moveAngle, 0.28);
