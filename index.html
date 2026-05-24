@@ -1823,6 +1823,69 @@
       }
     }
 
+
+    /* Race Setup vertical alignment: compress setup information upward so START/BACK
+       button row matches Course Select on phone landscape. */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #preRaceScreen .setupPanel {
+        padding-top: 16px;
+        padding-bottom: 4px;
+        justify-content: flex-start;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupPanel h2 {
+        margin-bottom: 3px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupGrid {
+        flex: 0 0 auto;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 3px 4px;
+        margin-top: 4px;
+        align-content: start;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupBox {
+        padding: 3px 4px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarBox,
+      #gameRoot.is-menu #preRaceScreen .setupCourseBox {
+        min-height: 44px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupSmallBox {
+        min-height: 24px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupLabel {
+        font-size: 7.5px;
+        margin-bottom: 1px;
+        line-height: 1;
+      }
+
+      #gameRoot.is-menu #preRaceScreen #setupCar,
+      #gameRoot.is-menu #preRaceScreen #setupCourse,
+      #gameRoot.is-menu #preRaceScreen #setupLaps,
+      #gameRoot.is-menu #preRaceScreen #setupDifficulty,
+      #gameRoot.is-menu #preRaceScreen #setupBest,
+      #gameRoot.is-menu #preRaceScreen #setupPoints {
+        font-size: clamp(12px, 2.25vw, 16px);
+        line-height: 1.05;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .garageActions {
+        margin-top: 8px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .garageActions .menuBtn {
+        height: 34px;
+        min-height: 34px;
+        font-size: clamp(14px, 2.8vw, 20px);
+        padding: 4px 8px;
+      }
+    }
+
   </style>
 </head>
 <body>
