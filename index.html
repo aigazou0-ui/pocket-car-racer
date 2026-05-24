@@ -1886,6 +1886,135 @@
       }
     }
 
+
+    /* Race Setup v2: undo over-compression and make mini map less wide on phone landscape. */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #preRaceScreen .setupPanel {
+        padding-top: 16px;
+        padding-bottom: 4px;
+        justify-content: flex-start;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupPanel h2 {
+        margin-bottom: 4px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupGrid {
+        flex: 0 0 auto;
+        gap: 5px 5px;
+        margin-top: 6px;
+        align-content: start;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupBox {
+        padding: 4px 5px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarBox,
+      #gameRoot.is-menu #preRaceScreen .setupCourseBox {
+        min-height: 56px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupSmallBox {
+        min-height: 30px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupLabel {
+        font-size: 8px;
+        margin-bottom: 2px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen #setupCar,
+      #gameRoot.is-menu #preRaceScreen #setupCourse,
+      #gameRoot.is-menu #preRaceScreen #setupLaps,
+      #gameRoot.is-menu #preRaceScreen #setupDifficulty,
+      #gameRoot.is-menu #preRaceScreen #setupBest,
+      #gameRoot.is-menu #preRaceScreen #setupPoints {
+        font-size: clamp(12px, 2.35vw, 17px);
+        line-height: 1.08;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCoursePreview {
+        grid-template-columns: minmax(0, 1fr) clamp(72px, 15vw, 98px);
+        align-items: center;
+        gap: 5px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCourseText {
+        padding-top: 0;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCourseMap {
+        width: clamp(72px, 15vw, 98px);
+        height: clamp(42px, 8.5vw, 56px);
+        min-height: 42px;
+        margin: 0;
+        justify-self: end;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .garageActions {
+        margin-top: 15px;
+      }
+    }
+
+
+    /* Mobile landscape result shrink: keep RETIRED/FINISH result inside the frame. */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #resultScreen {
+        padding: 5px;
+      }
+
+      #resultScreen .resultPanel {
+        width: min(610px, 96%);
+        max-height: 96%;
+        padding: 7px 9px;
+        overflow: hidden;
+        transform: scale(.96);
+        transform-origin: center center;
+      }
+
+      #resultScreen .resultPanel h2 {
+        margin-bottom: 5px;
+        font-size: clamp(18px, 3.4vw, 30px);
+      }
+
+      #resultScreen .resultSummary {
+        gap: 4px;
+        margin: 4px 0 6px;
+      }
+
+      #resultScreen .resultCard {
+        min-height: 34px;
+        padding: 4px 5px;
+      }
+
+      #resultScreen .resultLabel {
+        font-size: 8px;
+        line-height: 1;
+      }
+
+      #resultScreen .resultValue {
+        margin-top: 2px;
+        font-size: clamp(12px, 2.1vw, 17px);
+      }
+
+      #resultScreen .resultNote {
+        padding: 4px 5px;
+        font-size: clamp(10px, 1.8vw, 13px);
+      }
+
+      #resultScreen .resultPanel .resultActions {
+        gap: 5px;
+      }
+
+      #resultScreen .resultPanel .resultActions .menuBtn {
+        height: 38px;
+        min-height: 38px;
+        font-size: clamp(15px, 2.7vw, 20px);
+        padding: 4px 8px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -4724,8 +4853,9 @@
 
       const scale = r.kind === "player" ? 1.36 : 1.18;
       const carType = r.car.id || r.car.type || r.car.name.toLowerCase();
-      const mobileDprScaleFallback = clamp(window.devicePixelRatio || 1, 1, 2);
-      const p = Math.max(2.4, Math.round(3.2 * scale * mobileDprScaleFallback));
+      const isPhoneLandscape = window.matchMedia("(orientation: landscape) and (hover: none) and (pointer: coarse)").matches;
+      const mobileVisualScale = isPhoneLandscape ? 1.45 : 1;
+      const p = Math.max(2.4, Math.round(3.2 * scale * mobileVisualScale));
       const body = r.car.bodyColor;
       const shade = shadeColor(body, -46);
       const light = shadeColor(body, 50);
@@ -4744,8 +4874,7 @@
         const f1Sprites = ["player", "red", "blue", "green", "orange", "purple", "black"];
         const spriteWidth = sprite.naturalWidth || sprite.width;
         const spriteHeight = sprite.naturalHeight || sprite.height;
-        const mobileDprScale = clamp(window.devicePixelRatio || 1, 1, 2);
-        const drawH = (f1Sprites.includes(spriteKey) ? 96 : 88) * mobileDprScale;
+        const drawH = (f1Sprites.includes(spriteKey) ? 96 : 88) * mobileVisualScale;
         const drawW = drawH * (spriteWidth / spriteHeight);
         ctx.fillStyle = "rgba(0,0,0,.36)";
         ctx.beginPath();
