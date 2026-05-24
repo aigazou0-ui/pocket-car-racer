@@ -1386,6 +1386,254 @@
         line-height: 1.2;
       }
     }
+
+
+    /* --- Mobile landscape hotfix: keep every menu inside the 16:9 game area --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      .screen {
+        padding: 6px;
+      }
+
+      .panel {
+        width: 100%;
+        max-width: none;
+        max-height: 100%;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        padding: 8px;
+      }
+
+      .titlePanel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+        padding: 8px 12px;
+      }
+
+      .titleContent {
+        padding-left: clamp(52px, 8vw, 76px);
+      }
+
+      .titleLogo {
+        font-size: clamp(38px, 7.2vw, 66px);
+        line-height: .86;
+        text-shadow: 3px 3px 0 #8a2e2e, 5px 5px 0 #05070a;
+      }
+
+      .titlePanel::after {
+        left: 22px;
+        top: 27%;
+        width: 34px;
+        height: 46%;
+        background-size: 18px 18px;
+      }
+
+      .titleGarage {
+        min-height: 0;
+        gap: 4px;
+      }
+
+      .titleCars {
+        gap: clamp(22px, 4.5vw, 44px);
+        min-height: 88px;
+      }
+
+      .titleCar,
+      .titleCar.main {
+        width: clamp(32px, 5.2vw, 48px);
+      }
+
+      .titleBtn {
+        min-width: 190px;
+        min-height: 46px;
+        font-size: clamp(22px, 4.1vw, 30px);
+      }
+
+      .titleResetBtn {
+        min-height: 24px;
+        padding: 2px 7px;
+        font-size: 10px;
+      }
+
+      .garagePanel,
+      .coursePanel,
+      .setupPanel,
+      .resultPanel {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+
+      .garageHeader h2,
+      .coursePanel h2,
+      .setupPanel h2,
+      .resultPanel h2 {
+        margin-bottom: 4px;
+        font-size: clamp(17px, 3.1vw, 23px);
+        line-height: 1;
+      }
+
+      .garageGrid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 4px;
+      }
+
+      .garageCard {
+        padding: 16px 4px 5px;
+      }
+
+      .garageSprite,
+      .garageSprite.is-f1 {
+        width: clamp(70px, 11vw, 96px);
+        height: clamp(38px, 6vw, 54px);
+        margin-bottom: 2px;
+      }
+
+      .garageName {
+        font-size: 10px;
+      }
+
+      .garageMeta,
+      .statLine {
+        font-size: 7.5px;
+        line-height: 1.1;
+      }
+
+      .garageTools {
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+        margin-top: 5px;
+      }
+
+      .settingBox,
+      .setupBox {
+        padding: 5px;
+      }
+
+      .settingLabel,
+      .setupLabel {
+        margin-bottom: 3px;
+        font-size: 9px;
+      }
+
+      .segBtn {
+        min-height: 24px;
+        min-width: 0;
+        padding: 3px 4px;
+        font-size: 10px;
+      }
+
+      .garageActions,
+      .coursePanel .courseActions,
+      .resultActions {
+        gap: 6px;
+        margin-top: 6px;
+      }
+
+      .garageActions .menuBtn,
+      .coursePanel .courseActions .menuBtn,
+      .resultPanel .resultActions .menuBtn {
+        height: 42px;
+        min-height: 42px;
+        font-size: clamp(17px, 3.5vw, 24px);
+      }
+
+      .courseGrid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 5px;
+        margin-top: 4px;
+      }
+
+      .courseCard {
+        min-height: 0;
+        padding: 5px;
+      }
+
+      .courseName {
+        margin-bottom: 3px;
+        font-size: 11px;
+      }
+
+      .courseMap {
+        height: 34px;
+        margin: 1px 0 3px;
+      }
+
+      .courseMeta {
+        font-size: 7.5px;
+        line-height: 1.1;
+      }
+
+      .setupPanel {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .setupGrid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 5px;
+        margin-top: 4px;
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+
+      .setupCarBox,
+      .setupCourseBox {
+        grid-column: span 2;
+        min-height: 70px;
+      }
+
+      .setupSmallBox {
+        min-height: 34px;
+      }
+
+      .setupCarName,
+      .setupCourseName {
+        font-size: clamp(15px, 2.8vw, 22px);
+      }
+
+      .setupCarImage {
+        width: clamp(128px, 24vw, 220px);
+        height: clamp(58px, 10vw, 96px);
+      }
+
+      .setupCoursePreview {
+        grid-template-columns: minmax(90px, .72fr) minmax(0, 1.28fr);
+        gap: 6px;
+        transform: none;
+      }
+
+      .setupCourseText {
+        padding-top: 10px;
+      }
+
+      .setupCourseMap {
+        min-height: 58px;
+      }
+
+      .resultSummary {
+        gap: 5px;
+        margin: 5px 0 7px;
+      }
+
+      .resultCard {
+        min-height: 38px;
+        padding: 5px 6px;
+      }
+
+      .resultValue {
+        font-size: clamp(13px, 2.4vw, 19px);
+      }
+
+      .resultNote {
+        padding: 5px 6px;
+        font-size: 11px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -4220,7 +4468,8 @@
 
       const scale = r.kind === "player" ? 1.36 : 1.18;
       const carType = r.car.id || r.car.type || r.car.name.toLowerCase();
-      const p = Math.max(2.4, Math.round(3.2 * scale));
+      const mobileDprScaleFallback = clamp(window.devicePixelRatio || 1, 1, 2);
+      const p = Math.max(2.4, Math.round(3.2 * scale * mobileDprScaleFallback));
       const body = r.car.bodyColor;
       const shade = shadeColor(body, -46);
       const light = shadeColor(body, 50);
@@ -4239,7 +4488,8 @@
         const f1Sprites = ["player", "red", "blue", "green", "orange", "purple", "black"];
         const spriteWidth = sprite.naturalWidth || sprite.width;
         const spriteHeight = sprite.naturalHeight || sprite.height;
-        const drawH = f1Sprites.includes(spriteKey) ? 96 : 88;
+        const mobileDprScale = clamp(window.devicePixelRatio || 1, 1, 2);
+        const drawH = (f1Sprites.includes(spriteKey) ? 96 : 88) * mobileDprScale;
         const drawW = drawH * (spriteWidth / spriteHeight);
         ctx.fillStyle = "rgba(0,0,0,.36)";
         ctx.beginPath();
