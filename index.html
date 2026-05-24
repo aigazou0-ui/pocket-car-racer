@@ -2288,6 +2288,160 @@
       }
     }
 
+  
+
+    /* --- Mobile readability upgrade v6: larger garage/course/setup contents + speed 0.62 --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #garageScreen .garagePanel,
+      #gameRoot.is-menu #courseScreen .coursePanel,
+      #gameRoot.is-menu #preRaceScreen .setupPanel {
+        padding: 8px 9px 5px;
+        gap: 5px;
+      }
+
+      /* 1) Garage: 6 cars in 3 x 2, bigger vertical car sprites and readable stats. */
+      #gameRoot.is-menu #garageScreen .garageGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageCard {
+        padding: 14px 7px 6px;
+        display: grid;
+        grid-template-rows: minmax(56px, auto) auto auto;
+        align-content: center;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageSprite,
+      #gameRoot.is-menu #garageScreen .garageSprite.is-f1 {
+        width: clamp(112px, 18vw, 160px);
+        height: clamp(62px, 10vw, 88px);
+        margin: -4px auto 2px;
+        object-fit: contain;
+        transform: rotate(90deg);
+      }
+
+      #gameRoot.is-menu #garageScreen .garageName {
+        font-size: clamp(12px, 2.05vw, 16px);
+        line-height: 1.05;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageMeta,
+      #gameRoot.is-menu #garageScreen .statLine {
+        font-size: clamp(9px, 1.55vw, 12px);
+        line-height: 1.18;
+      }
+
+      #gameRoot.is-menu #garageScreen .statBars {
+        gap: 2px 6px;
+        margin-top: 3px;
+        padding-top: 3px;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageTools {
+        gap: 6px;
+      }
+
+      #gameRoot.is-menu #garageScreen .settingBox {
+        padding: 6px 7px;
+      }
+
+      #gameRoot.is-menu #garageScreen .settingLabel {
+        font-size: clamp(9px, 1.55vw, 12px);
+        margin-bottom: 4px;
+      }
+
+      #gameRoot.is-menu #garageScreen .segBtn {
+        min-height: 25px;
+        font-size: clamp(10px, 1.7vw, 13px);
+      }
+
+      /* 2) Course Select: taller cards, bigger course name/meta, and taller mini maps. */
+      #gameRoot.is-menu #courseScreen .courseGrid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseCard {
+        padding: 7px 7px 6px;
+        display: grid;
+        grid-template-rows: auto minmax(48px, 1fr) auto;
+        align-content: stretch;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseName {
+        font-size: clamp(13px, 2.15vw, 17px);
+        line-height: 1.05;
+        margin-bottom: 4px;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseMap {
+        height: clamp(46px, 9.2vh, 58px);
+        margin: 1px 0 4px;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseMeta {
+        font-size: clamp(9px, 1.5vw, 12px);
+        line-height: 1.18;
+      }
+
+      /* 3) Race Setup: bigger labels/text, car preview, and mini map while keeping bottom buttons fixed. */
+      #gameRoot.is-menu #preRaceScreen .setupGrid {
+        grid-template-rows: minmax(78px, 1.1fr) minmax(54px, .8fr);
+        gap: 7px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupBox {
+        padding: 7px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupLabel {
+        font-size: clamp(9px, 1.55vw, 12px);
+        margin-bottom: 4px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarName,
+      #gameRoot.is-menu #preRaceScreen .setupCourseName,
+      #gameRoot.is-menu #preRaceScreen #setupCar,
+      #gameRoot.is-menu #preRaceScreen #setupCourse,
+      #gameRoot.is-menu #preRaceScreen #setupLaps,
+      #gameRoot.is-menu #preRaceScreen #setupDifficulty,
+      #gameRoot.is-menu #preRaceScreen #setupBest,
+      #gameRoot.is-menu #preRaceScreen #setupPoints {
+        font-size: clamp(15px, 2.55vw, 21px);
+        line-height: 1.05;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarPreview {
+        gap: 8px;
+        padding-top: 2px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarImage {
+        width: clamp(150px, 26vw, 240px);
+        height: clamp(68px, 12vw, 108px);
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCoursePreview {
+        grid-template-columns: minmax(88px, .76fr) minmax(0, 1.24fr);
+        gap: 7px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCourseText {
+        padding-top: 8px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCourseMap {
+        min-height: clamp(54px, 10vh, 70px);
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupSmallBox {
+        justify-content: center;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -2488,7 +2642,7 @@
     };
 
     const TOTAL_LAPS = 3;
-    const DRIVE_SPEED_SCALE = 0.58;
+    const DRIVE_SPEED_SCALE = 0.62;
     const WORLD_SCALE = 8;
     const STORAGE_PREFIX = "pocketPitRacer_best_";
     const OVERALL_BEST_KEY = "pocketPitRacer_best_overall";
