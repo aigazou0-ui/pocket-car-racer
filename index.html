@@ -2085,6 +2085,130 @@
       }
     }
 
+
+    /* Unified mobile menu layout v5: Garage / Course Select / Race Setup share one fixed bottom button row. */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      :root {
+        --common-menu-button-row-height: 36px;
+      }
+
+      #gameRoot.is-menu #garageScreen .garagePanel,
+      #gameRoot.is-menu #courseScreen .coursePanel,
+      #gameRoot.is-menu #preRaceScreen .setupPanel {
+        height: 100%;
+        padding: 8px 8px 5px;
+        display: grid;
+        gap: 5px;
+        justify-content: stretch;
+        align-content: stretch;
+        overflow: hidden;
+      }
+
+      #gameRoot.is-menu #garageScreen .garagePanel {
+        grid-template-rows: auto minmax(0, 1fr) auto var(--common-menu-button-row-height);
+      }
+
+      #gameRoot.is-menu #courseScreen .coursePanel,
+      #gameRoot.is-menu #preRaceScreen .setupPanel {
+        grid-template-rows: auto minmax(0, 1fr) var(--common-menu-button-row-height);
+      }
+
+      #gameRoot.is-menu #garageScreen .garageHeader,
+      #gameRoot.is-menu #courseScreen .coursePanel h2,
+      #gameRoot.is-menu #preRaceScreen .setupPanel h2 {
+        margin: 0;
+        min-height: 22px;
+        display: flex;
+        align-items: center;
+      }
+
+      #gameRoot.is-menu #courseScreen .coursePanel h2,
+      #gameRoot.is-menu #preRaceScreen .setupPanel h2 {
+        justify-content: center;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageGrid,
+      #gameRoot.is-menu #courseScreen .courseGrid,
+      #gameRoot.is-menu #preRaceScreen .setupGrid {
+        margin-top: 0;
+        min-height: 0;
+        align-self: stretch;
+        overflow: hidden;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageGrid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 5px;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseGrid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupGrid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: minmax(56px, .95fr) minmax(46px, .75fr);
+        gap: 5px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarBox,
+      #gameRoot.is-menu #preRaceScreen .setupCourseBox,
+      #gameRoot.is-menu #preRaceScreen .setupSmallBox {
+        min-height: 0;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupSmallBox {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageTools {
+        margin-top: 0;
+        min-height: 0;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+      }
+
+      #gameRoot.is-menu #garageScreen .settingBox {
+        padding: 5px;
+      }
+
+      #gameRoot.is-menu #garageScreen .settingLabel {
+        margin-bottom: 3px;
+        font-size: 8px;
+      }
+
+      #gameRoot.is-menu #garageScreen .segBtn {
+        min-height: 24px;
+        padding: 3px 4px;
+        font-size: 10px;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageActions,
+      #gameRoot.is-menu #courseScreen .courseActions,
+      #gameRoot.is-menu #preRaceScreen .garageActions {
+        align-self: end;
+        margin: 0 !important;
+        height: var(--common-menu-button-row-height);
+        min-height: var(--common-menu-button-row-height);
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, .85fr);
+        gap: 5px;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageActions .menuBtn,
+      #gameRoot.is-menu #courseScreen .courseActions .menuBtn,
+      #gameRoot.is-menu #preRaceScreen .garageActions .menuBtn {
+        width: 100%;
+        height: var(--common-menu-button-row-height);
+        min-height: var(--common-menu-button-row-height);
+        padding: 4px 8px;
+        font-size: clamp(14px, 2.8vw, 20px);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -3017,7 +3141,21 @@
       updateBgmMode();
     }
 
+    function isRaceLayoutLocked() {
+      return state === GameState.COUNTDOWN
+        || state === GameState.RACING
+        || state === GameState.RETIRE_CONFIRM;
+    }
+
     function resizeCanvas() {
+      // Do not rebuild the canvas/world while a race is active.
+      // On phones, rotating to portrait hides #gameRoot; the old code then measured a tiny/empty
+      // canvas and called resetRaceObjects(false), which restarted the race when returning to landscape.
+      if (isRaceLayoutLocked()) {
+        renderDirty = true;
+        return;
+      }
+
       const wrap = canvas.parentElement.getBoundingClientRect();
       const dpr = clamp(window.devicePixelRatio || 1, 1, 2);
       const width = Math.max(480, Math.floor(wrap.width * dpr));
@@ -3726,9 +3864,9 @@
         rankScore: 0,
         waypointIndex: 0,
         laneOffset,
-        // Stricter car-to-car contact on mobile/PC.
-        // Visual car size stays the same, but racers touch earlier.
-        radius: kind === "player" ? 38 : 36,
+        // Much stricter car-to-car contact on mobile/PC.
+        // Visual car size stays the same, but racers touch earlier and cannot overlap as easily.
+        radius: kind === "player" ? 48 : 46,
         collisionCooldown: 0,
         avoidBias: 0,
         avoidBiasTimer: 0,
@@ -4022,11 +4160,11 @@
           const dx = b.x - a.x;
           const dy = b.y - a.y;
           const dist = Math.hypot(dx, dy);
-          const minDist = (a.radius + b.radius) * 1.06;
+          const minDist = (a.radius + b.radius) * 1.18;
           if (dist > 0 && dist < minDist) {
             const playerContact = a.kind === "player" || b.kind === "player";
             // Stricter contact: separate cars more clearly and reduce speed more on impact.
-            const push = (minDist - dist) / 2 + (playerContact ? 26 : 18);
+            const push = (minDist - dist) / 2 + (playerContact ? 36 : 28);
             const nx = dx / dist;
             const ny = dy / dist;
             a.x -= nx * push;
@@ -4034,9 +4172,9 @@
             b.x += nx * push;
             b.y += ny * push;
 
-            const bounceDamping = playerContact ? 0.20 : 0.19;
-            const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.38);
-            const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.38);
+            const bounceDamping = playerContact ? 0.16 : 0.15;
+            const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.30);
+            const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.30);
             a.moveAngle = Math.atan2(-ny, -nx);
             b.moveAngle = Math.atan2(ny, nx);
             a.angle = angleLerp(a.angle, a.moveAngle, 0.28);
