@@ -1,4 +1,4 @@
-const CACHE_NAME = "pocket-car-racer-pwa-v2";
+const CACHE_NAME = "pocket-car-racer-pwa-v1";
 const CORE_ASSETS = [
   "./",
   "./index.html",

@@ -2488,6 +2488,59 @@
       }
     }
 
+
+    /* --- Mobile garage hotfix v8: keep car names and BUY price inside cards --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #garageScreen .garageCard {
+        padding-left: 6px;
+        padding-right: 6px;
+        grid-template-rows: minmax(50px, auto) 15px 12px auto;
+        row-gap: 1px;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageSprite,
+      #gameRoot.is-menu #garageScreen .garageSprite.is-f1 {
+        margin-bottom: -1px;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageName {
+        width: 100%;
+        min-width: 0;
+        font-size: clamp(9.2px, 1.32vw, 11.8px);
+        line-height: 1;
+        letter-spacing: -0.55px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageMeta {
+        width: 100%;
+        min-width: 0;
+        margin-top: 0;
+        font-size: clamp(7.8px, 1.12vw, 9.4px);
+        line-height: 1;
+        letter-spacing: -0.35px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: clip;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageCard.is-selected::after,
+      #gameRoot.is-menu #garageScreen .garageCard.is-locked::after {
+        top: 3px;
+        right: 3px;
+        padding: 1px 3px;
+        font-size: 7px;
+        line-height: 1;
+      }
+
+      #gameRoot.is-menu #garageScreen .statBars {
+        margin-top: 1px;
+        padding-top: 1px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -4785,7 +4838,7 @@
         card.className = `garageCard${selected ? " is-selected" : ""}${ownedCar ? "" : " is-locked"}`;
         const meta = ownedCar
           ? `${selected ? "Selected" : "Owned"}`
-          : `${car.cost}P to buy`;
+          : `BUY ${car.cost}P`;
         card.innerHTML = `
           <img class="garageSprite${car.id === "f1" ? " is-f1" : ""}" src="${car.spriteId === "player" ? "assets/cars/red2.png" : `assets/cars/shop/${car.spriteId}.png`}" alt="">
           <div class="garageName">${car.name}</div>
