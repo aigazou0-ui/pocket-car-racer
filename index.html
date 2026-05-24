@@ -2782,6 +2782,95 @@
       }
     }
 
+
+    /* --- Mobile garage hotfix v12: prioritize full car visibility over size. --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #garageScreen .garageCard {
+        /* Make every card a strict small layout so nothing can overlap or escape. */
+        display: grid !important;
+        grid-template-rows: 44px 14px 12px 16px !important;
+        row-gap: 0 !important;
+        padding: 8px 4px 3px !important;
+        align-content: stretch !important;
+        justify-items: center !important;
+        overflow: hidden !important;
+        contain: layout paint !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageSprite,
+      #gameRoot.is-menu #garageScreen .garageSprite.is-f1 {
+        /* Rotated sprites use CSS height as visible width and CSS width as visible height.
+           These values are intentionally smaller so the whole car always stays visible. */
+        grid-row: 1 !important;
+        width: 40px !important;
+        height: 76px !important;
+        max-width: 76px !important;
+        max-height: 40px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        object-fit: contain !important;
+        transform: rotate(90deg) scale(.92) !important;
+        transform-origin: center center !important;
+        display: block !important;
+        align-self: center !important;
+        justify-self: center !important;
+        z-index: 1 !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageName {
+        grid-row: 2 !important;
+        height: 14px !important;
+        line-height: 14px !important;
+        font-size: clamp(8px, 1.05vw, 9.6px) !important;
+        letter-spacing: -0.45px !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: clip !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageMeta {
+        grid-row: 3 !important;
+        height: 12px !important;
+        line-height: 12px !important;
+        font-size: clamp(7px, .95vw, 8.4px) !important;
+        letter-spacing: -0.35px !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: clip !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statBars {
+        grid-row: 4 !important;
+        height: 16px !important;
+        min-height: 16px !important;
+        margin: 0 !important;
+        padding-top: 1px !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 0 1px !important;
+        overflow: hidden !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statLine {
+        font-size: clamp(5.5px, .78vw, 6.6px) !important;
+        line-height: 1 !important;
+        letter-spacing: -0.55px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageCard.is-selected::after,
+      #gameRoot.is-menu #garageScreen .garageCard.is-locked::after {
+        top: 1px !important;
+        right: 1px !important;
+        max-width: 32px !important;
+        padding: 1px 2px !important;
+        font-size: 5px !important;
+        line-height: 1 !important;
+      }
+    }
+
   </style>
 </head>
 <body>
