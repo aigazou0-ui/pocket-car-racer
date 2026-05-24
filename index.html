@@ -1634,6 +1634,177 @@
       }
     }
 
+
+    /* --- Mobile landscape v2: menus use the full phone screen, not the race HUD area --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu {
+        grid-template-rows: 1fr;
+        gap: 0;
+        padding:
+          max(3px, env(safe-area-inset-top))
+          max(5px, env(safe-area-inset-right))
+          max(3px, env(safe-area-inset-bottom))
+          max(5px, env(safe-area-inset-left));
+      }
+
+      #gameRoot.is-menu .hud,
+      #gameRoot.is-menu .bottomBar {
+        display: none;
+      }
+
+      #gameRoot.is-menu .playfield {
+        width: 100%;
+        height: 100%;
+      }
+
+      #gameRoot.is-menu .canvasWrap {
+        width: min(100%, calc((100dvh - 8px) * 16 / 9));
+        max-height: 100%;
+        border-width: 2px;
+        box-shadow: 0 0 0 2px #071009;
+      }
+
+      #gameRoot.is-menu .screen {
+        padding: 4px;
+      }
+
+      #gameRoot.is-menu .panel {
+        padding: 6px;
+        height: 100%;
+        max-height: 100%;
+      }
+
+      #gameRoot.is-menu .titlePanel {
+        grid-template-columns: .95fr 1.05fr;
+        padding: 5px 8px;
+        gap: 2px;
+      }
+
+      #gameRoot.is-menu .titleContent {
+        padding-left: clamp(42px, 7vw, 64px);
+      }
+
+      #gameRoot.is-menu .titleLogo {
+        font-size: clamp(32px, 6.5vw, 58px);
+        line-height: .82;
+        text-shadow: 2px 2px 0 #8a2e2e, 4px 4px 0 #05070a;
+      }
+
+      #gameRoot.is-menu .titlePanel::after {
+        left: 14px;
+        top: 28%;
+        width: clamp(22px, 4vw, 32px);
+        height: 44%;
+        background-size: 16px 16px;
+        border-width: 2px;
+      }
+
+      #gameRoot.is-menu .titleCars {
+        min-height: 60px;
+        gap: clamp(16px, 3.5vw, 32px);
+      }
+
+      #gameRoot.is-menu .titleCar,
+      #gameRoot.is-menu .titleCar.main {
+        width: clamp(24px, 4.2vw, 42px);
+      }
+
+      #gameRoot.is-menu .titleCar:nth-child(1) { transform: translateY(-30%) rotate(90deg); }
+      #gameRoot.is-menu .titleCar:nth-child(2) { transform: translateY(8%) rotate(90deg); }
+      #gameRoot.is-menu .titleCar:nth-child(3) { transform: translateY(-24%) rotate(90deg); }
+
+      #gameRoot.is-menu .titleBtn {
+        min-width: clamp(140px, 30vw, 190px);
+        min-height: 38px;
+        font-size: clamp(18px, 3.6vw, 26px);
+      }
+
+      #gameRoot.is-menu .titleResetBtn {
+        left: 6px;
+        top: 6px;
+        min-height: 20px;
+        padding: 1px 5px;
+        font-size: 8px;
+      }
+
+      #gameRoot.is-menu .garageHeader {
+        margin-bottom: 3px;
+      }
+
+      #gameRoot.is-menu .garageHeader h2,
+      #gameRoot.is-menu .coursePanel h2,
+      #gameRoot.is-menu .setupPanel h2,
+      #gameRoot.is-menu .resultPanel h2 {
+        font-size: clamp(14px, 2.5vw, 19px);
+        margin-bottom: 2px;
+      }
+
+      #gameRoot.is-menu .setupGrid {
+        gap: 4px;
+        margin-top: 2px;
+      }
+
+      #gameRoot.is-menu .setupBox {
+        padding: 4px;
+      }
+
+      #gameRoot.is-menu .setupCarBox,
+      #gameRoot.is-menu .setupCourseBox {
+        min-height: 54px;
+      }
+
+      #gameRoot.is-menu .setupSmallBox {
+        min-height: 28px;
+      }
+
+      #gameRoot.is-menu .setupLabel {
+        font-size: 8px;
+        margin-bottom: 1px;
+      }
+
+      #gameRoot.is-menu .setupCarName,
+      #gameRoot.is-menu .setupCourseName,
+      #gameRoot.is-menu #setupCar,
+      #gameRoot.is-menu #setupCourse {
+        font-size: clamp(13px, 2.5vw, 18px);
+        line-height: 1;
+      }
+
+      #gameRoot.is-menu .setupCarImage {
+        width: clamp(100px, 20vw, 170px);
+        height: clamp(44px, 8vw, 72px);
+      }
+
+      #gameRoot.is-menu .setupCoursePreview {
+        grid-template-columns: minmax(72px, .65fr) minmax(0, 1.35fr);
+        gap: 4px;
+      }
+
+      #gameRoot.is-menu .setupCourseText {
+        padding-top: 4px;
+      }
+
+      #gameRoot.is-menu .setupCourseMap {
+        min-height: 42px;
+      }
+
+      #gameRoot.is-menu .garageActions,
+      #gameRoot.is-menu .coursePanel .courseActions,
+      #gameRoot.is-menu .resultActions {
+        margin-top: 4px;
+        gap: 4px;
+      }
+
+      #gameRoot.is-menu .garageActions .menuBtn,
+      #gameRoot.is-menu .coursePanel .courseActions .menuBtn,
+      #gameRoot.is-menu .resultPanel .resultActions .menuBtn {
+        height: 34px;
+        min-height: 34px;
+        font-size: clamp(14px, 2.8vw, 20px);
+        padding: 4px 8px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -2551,6 +2722,10 @@
       ui.retire.disabled = state !== GameState.RACING && state !== GameState.COUNTDOWN && state !== GameState.RETIRE_CONFIRM;
       document.querySelector(".hud").classList.toggle(
         "is-hidden",
+        state !== GameState.COUNTDOWN && state !== GameState.RACING && state !== GameState.FINISH
+      );
+      document.getElementById("gameRoot").classList.toggle(
+        "is-menu",
         state !== GameState.COUNTDOWN && state !== GameState.RACING && state !== GameState.FINISH
       );
       const showDriveControls = state === GameState.RACING || state === GameState.COUNTDOWN;
