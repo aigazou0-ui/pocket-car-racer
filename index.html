@@ -2039,6 +2039,52 @@
       }
     }
 
+
+    /* Final mobile landscape alignment: lower Course Select slightly, fill Race Setup gap,
+       and keep setup button spacing consistent with the boxes above. */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #courseScreen .coursePanel {
+        padding-top: 22px;
+        padding-bottom: 4px;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseGrid {
+        margin-top: 8px;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseActions {
+        margin-top: 10px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupPanel {
+        padding-top: 16px;
+        padding-bottom: 4px;
+        justify-content: flex-start;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupGrid {
+        flex: 0 0 auto;
+        gap: 5px 5px;
+        margin-top: 6px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarBox,
+      #gameRoot.is-menu #preRaceScreen .setupCourseBox {
+        min-height: 56px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupSmallBox {
+        min-height: 58px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .garageActions {
+        margin-top: 5px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -3682,7 +3728,7 @@
         laneOffset,
         // Stricter car-to-car contact on mobile/PC.
         // Visual car size stays the same, but racers touch earlier.
-        radius: kind === "player" ? 28 : 26,
+        radius: kind === "player" ? 38 : 36,
         collisionCooldown: 0,
         avoidBias: 0,
         avoidBiasTimer: 0,
@@ -3976,11 +4022,11 @@
           const dx = b.x - a.x;
           const dy = b.y - a.y;
           const dist = Math.hypot(dx, dy);
-          const minDist = a.radius + b.radius;
+          const minDist = (a.radius + b.radius) * 1.06;
           if (dist > 0 && dist < minDist) {
             const playerContact = a.kind === "player" || b.kind === "player";
             // Stricter contact: separate cars more clearly and reduce speed more on impact.
-            const push = (minDist - dist) / 2 + (playerContact ? 19 : 13);
+            const push = (minDist - dist) / 2 + (playerContact ? 26 : 18);
             const nx = dx / dist;
             const ny = dy / dist;
             a.x -= nx * push;
@@ -3988,9 +4034,9 @@
             b.x += nx * push;
             b.y += ny * push;
 
-            const bounceDamping = playerContact ? 0.29 : 0.26;
-            const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.56);
-            const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.56);
+            const bounceDamping = playerContact ? 0.20 : 0.19;
+            const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.38);
+            const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.38);
             a.moveAngle = Math.atan2(-ny, -nx);
             b.moveAngle = Math.atan2(ny, nx);
             a.angle = angleLerp(a.angle, a.moveAngle, 0.28);
