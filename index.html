@@ -2027,6 +2027,18 @@
       }
     }
 
+
+    /* Race Setup v4: lower only the START/BACK button row a little more. Mini map unchanged. */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #preRaceScreen .garageActions {
+        margin-top: 39px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupPanel {
+        padding-bottom: 2px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -2948,7 +2960,10 @@
       );
       document.getElementById("gameRoot").classList.toggle(
         "is-menu",
-        state !== GameState.COUNTDOWN && state !== GameState.RACING && state !== GameState.FINISH
+        state !== GameState.COUNTDOWN
+          && state !== GameState.RACING
+          && state !== GameState.FINISH
+          && state !== GameState.RETIRE_CONFIRM
       );
       const showDriveControls = state === GameState.RACING || state === GameState.COUNTDOWN;
       ui.controlPad.classList.toggle("is-visible", showDriveControls);
@@ -3665,9 +3680,9 @@
         rankScore: 0,
         waypointIndex: 0,
         laneOffset,
-        // Slightly stricter car-to-car contact on mobile/PC.
-        // Visual car size stays the same, but racers touch a little earlier.
-        radius: kind === "player" ? 26 : 24,
+        // Stricter car-to-car contact on mobile/PC.
+        // Visual car size stays the same, but racers touch earlier.
+        radius: kind === "player" ? 28 : 26,
         collisionCooldown: 0,
         avoidBias: 0,
         avoidBiasTimer: 0,
@@ -3965,7 +3980,7 @@
           if (dist > 0 && dist < minDist) {
             const playerContact = a.kind === "player" || b.kind === "player";
             // Stricter contact: separate cars more clearly and reduce speed more on impact.
-            const push = (minDist - dist) / 2 + (playerContact ? 16 : 11);
+            const push = (minDist - dist) / 2 + (playerContact ? 19 : 13);
             const nx = dx / dist;
             const ny = dy / dist;
             a.x -= nx * push;
@@ -3973,9 +3988,9 @@
             b.x += nx * push;
             b.y += ny * push;
 
-            const bounceDamping = playerContact ? 0.34 : 0.30;
-            const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.62);
-            const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.62);
+            const bounceDamping = playerContact ? 0.29 : 0.26;
+            const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.56);
+            const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.56);
             a.moveAngle = Math.atan2(-ny, -nx);
             b.moveAngle = Math.atan2(ny, nx);
             a.angle = angleLerp(a.angle, a.moveAngle, 0.28);
