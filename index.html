@@ -2015,6 +2015,18 @@
       }
     }
 
+
+    /* Race Setup v3: keep mini map as-is, lower START/BACK row to match Course Select. */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #preRaceScreen .garageActions {
+        margin-top: 30px;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupPanel {
+        padding-bottom: 3px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -3653,7 +3665,9 @@
         rankScore: 0,
         waypointIndex: 0,
         laneOffset,
-        radius: kind === "player" ? 23 : 21,
+        // Slightly stricter car-to-car contact on mobile/PC.
+        // Visual car size stays the same, but racers touch a little earlier.
+        radius: kind === "player" ? 26 : 24,
         collisionCooldown: 0,
         avoidBias: 0,
         avoidBiasTimer: 0,
@@ -3950,7 +3964,8 @@
           const minDist = a.radius + b.radius;
           if (dist > 0 && dist < minDist) {
             const playerContact = a.kind === "player" || b.kind === "player";
-            const push = (minDist - dist) / 2 + (playerContact ? 12 : 8);
+            // Stricter contact: separate cars more clearly and reduce speed more on impact.
+            const push = (minDist - dist) / 2 + (playerContact ? 16 : 11);
             const nx = dx / dist;
             const ny = dy / dist;
             a.x -= nx * push;
@@ -3958,9 +3973,9 @@
             b.x += nx * push;
             b.y += ny * push;
 
-            const bounceDamping = playerContact ? 0.42 : 0.36;
-            const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.85);
-            const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.85);
+            const bounceDamping = playerContact ? 0.34 : 0.30;
+            const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.62);
+            const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.62);
             a.moveAngle = Math.atan2(-ny, -nx);
             b.moveAngle = Math.atan2(ny, nx);
             a.angle = angleLerp(a.angle, a.moveAngle, 0.28);
