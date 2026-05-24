@@ -2541,6 +2541,80 @@
       }
     }
 
+  
+
+    /* --- Mobile garage hotfix v9: reserve fixed rows for car name and BUY/OWN labels. --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #garageScreen .garageCard {
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) 14px 12px 18px;
+        row-gap: 1px;
+        min-height: 0;
+        padding: 15px 5px 4px;
+        align-content: stretch;
+        justify-items: stretch;
+        overflow: hidden;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageSprite,
+      #gameRoot.is-menu #garageScreen .garageSprite.is-f1 {
+        align-self: center;
+        justify-self: center;
+        width: clamp(98px, 16.5vw, 142px);
+        height: 100%;
+        max-height: 64px;
+        min-height: 0;
+        margin: -2px auto 0;
+        object-fit: contain;
+        transform: rotate(90deg);
+      }
+
+      #gameRoot.is-menu #garageScreen .garageName {
+        display: block;
+        height: 14px;
+        min-height: 14px;
+        line-height: 14px;
+        width: 100%;
+        text-align: center;
+        font-size: clamp(8.8px, 1.22vw, 10.8px);
+        letter-spacing: -0.45px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: clip;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageMeta {
+        display: block;
+        height: 12px;
+        min-height: 12px;
+        line-height: 12px;
+        width: 100%;
+        text-align: center;
+        font-size: clamp(7.8px, 1.08vw, 9px);
+        letter-spacing: -0.35px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: clip;
+      }
+
+      #gameRoot.is-menu #garageScreen .statBars {
+        align-self: end;
+        height: 18px;
+        min-height: 18px;
+        margin-top: 0;
+        padding-top: 1px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1px 2px;
+        overflow: hidden;
+      }
+
+      #gameRoot.is-menu #garageScreen .statLine {
+        font-size: clamp(6.2px, .92vw, 7.8px);
+        line-height: 1;
+        letter-spacing: -0.5px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -4837,11 +4911,19 @@
         card.type = "button";
         card.className = `garageCard${selected ? " is-selected" : ""}${ownedCar ? "" : " is-locked"}`;
         const meta = ownedCar
-          ? `${selected ? "Selected" : "Owned"}`
+          ? `${selected ? "SEL" : "OWN"}`
           : `BUY ${car.cost}P`;
+        const garageDisplayNames = {
+          lamborghini: "Lambo",
+          ferrari: "Ferrari",
+          porsche: "Porsche",
+          gtr: "GTR",
+          nsx: "NSX",
+          f1: "F1"
+        };
         card.innerHTML = `
           <img class="garageSprite${car.id === "f1" ? " is-f1" : ""}" src="${car.spriteId === "player" ? "assets/cars/red2.png" : `assets/cars/shop/${car.spriteId}.png`}" alt="">
-          <div class="garageName">${car.name}</div>
+          <div class="garageName">${garageDisplayNames[car.id] || car.name}</div>
           <div class="garageMeta">${meta}</div>
           <div class="statBars">${carStats(car.id)}</div>
         `;
