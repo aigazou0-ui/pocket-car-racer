@@ -2744,6 +2744,44 @@
       }
     }
 
+
+    /* --- Mobile garage hotfix v11: contain the enlarged vertical car sprites inside each card. --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #garageScreen .garageCard {
+        contain: layout paint;
+        overflow: hidden !important;
+        grid-template-rows: minmax(50px, 1fr) 15px 13px 17px !important;
+        padding: 12px 5px 4px !important;
+      }
+
+      /* Previous version made the rotated sprite too large.
+         Since rotate(90deg) swaps visual width/height, the CSS height becomes
+         the visible horizontal size. Keep that below the card width and remove
+         negative margins so the sprite cannot escape the card. */
+      #gameRoot.is-menu #garageScreen .garageSprite,
+      #gameRoot.is-menu #garageScreen .garageSprite.is-f1 {
+        grid-row: 1;
+        align-self: center;
+        justify-self: center;
+        width: clamp(50px, 8.6vw, 64px) !important;
+        height: clamp(82px, 13.2vw, 106px) !important;
+        max-width: none !important;
+        max-height: none !important;
+        margin: 0 auto !important;
+        object-fit: contain;
+        transform: rotate(90deg) !important;
+        transform-origin: center center;
+        display: block;
+        z-index: 1;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageName,
+      #gameRoot.is-menu #garageScreen .garageMeta,
+      #gameRoot.is-menu #garageScreen .statBars {
+        z-index: 2;
+      }
+    }
+
   </style>
 </head>
 <body>
