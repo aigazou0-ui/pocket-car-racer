@@ -2984,6 +2984,284 @@
       }
     }
 
+
+    /* --- Mobile garage redesign v14: larger text/cars with price-only labels. --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #garageScreen .garagePanel {
+        padding: 7px 8px 5px !important;
+        gap: 5px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageHeader {
+        min-height: 20px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageHeader h2 {
+        font-size: clamp(16px, 3vw, 22px) !important;
+        line-height: 1 !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .pointsBadge {
+        min-width: 76px !important;
+        padding: 3px 8px !important;
+        font-size: clamp(12px, 2.1vw, 16px) !important;
+        line-height: 1.05 !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+        overflow: hidden !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageCard {
+        /* Fixed areas: top label, big car, two-row stats. Price uses points only. */
+        display: grid !important;
+        grid-template-rows: 19px minmax(42px, 1fr) 26px !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        column-gap: 5px !important;
+        row-gap: 2px !important;
+        padding: 5px 6px 4px !important;
+        align-content: stretch !important;
+        justify-items: stretch !important;
+        overflow: hidden !important;
+        contain: layout paint !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageName {
+        grid-row: 1 !important;
+        grid-column: 1 !important;
+        width: 100% !important;
+        height: 19px !important;
+        min-height: 19px !important;
+        line-height: 19px !important;
+        padding: 0 2px !important;
+        text-align: left !important;
+        font-size: clamp(13px, 2.15vw, 17px) !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.45px !important;
+        color: #fff8c9 !important;
+        background: transparent !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: clip !important;
+        z-index: 3 !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageMeta {
+        grid-row: 1 !important;
+        grid-column: 2 !important;
+        width: auto !important;
+        min-width: 32px !important;
+        height: 19px !important;
+        min-height: 19px !important;
+        line-height: 17px !important;
+        margin: 0 !important;
+        padding: 1px 5px !important;
+        border: 1px solid rgba(248, 212, 74, .72) !important;
+        border-radius: 3px !important;
+        text-align: center !important;
+        font-size: clamp(10.5px, 1.75vw, 13.5px) !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.35px !important;
+        color: #f8d44a !important;
+        background: rgba(16, 25, 36, .86) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: clip !important;
+        z-index: 3 !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageCard.is-selected .garageMeta {
+        color: #111 !important;
+        background: #f8d44a !important;
+        border-color: #fff8c9 !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageCard.is-locked .garageMeta {
+        color: #fff8c9 !important;
+        background: #6d1f2a !important;
+        border-color: rgba(255, 154, 153, .8) !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageSprite,
+      #gameRoot.is-menu #garageScreen .garageSprite.is-f1 {
+        grid-row: 2 !important;
+        grid-column: 1 / -1 !important;
+        /* Rotated sprite: CSS height = visible width, CSS width = visible height. */
+        width: clamp(46px, 8.6vw, 60px) !important;
+        height: clamp(88px, 16vw, 118px) !important;
+        max-width: none !important;
+        max-height: none !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        object-fit: contain !important;
+        transform: rotate(90deg) scale(.96) !important;
+        transform-origin: center center !important;
+        align-self: center !important;
+        justify-self: center !important;
+        display: block !important;
+        z-index: 1 !important;
+        pointer-events: none !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statBars {
+        grid-row: 3 !important;
+        grid-column: 1 / -1 !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+        width: 100% !important;
+        height: 26px !important;
+        min-height: 26px !important;
+        margin: 0 !important;
+        padding: 2px 4px !important;
+        gap: 1px 5px !important;
+        border-top: 1px solid rgba(240, 233, 167, .22) !important;
+        background: rgba(16, 25, 36, .88) !important;
+        overflow: hidden !important;
+        z-index: 3 !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statLine {
+        font-size: clamp(8.5px, 1.32vw, 10.5px) !important;
+        line-height: 1.05 !important;
+        letter-spacing: -0.45px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-align: center !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statRank {
+        margin-left: 2px !important;
+        font-size: 1.12em !important;
+      }
+
+      /* Status is now in the top price/status badge, so remove corner ribbons that were stealing space. */
+      #gameRoot.is-menu #garageScreen .garageCard.is-selected::after,
+      #gameRoot.is-menu #garageScreen .garageCard.is-locked::after {
+        content: none !important;
+        display: none !important;
+      }
+    }
+
+
+    /* v7: readable large garage, faster race, title animation, larger mini maps/setup previews */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu .titleLogo {
+        animation: titlePulseBlink 1.05s steps(2, end) infinite;
+      }
+
+      #titleScreen.is-starting .titleLogo,
+      #titleScreen.is-starting .titleBtn {
+        animation: none !important;
+        opacity: .72;
+      }
+
+      #titleScreen.is-starting .titleCar {
+        animation: titleCarRunLeft .78s cubic-bezier(.2,.72,.18,1) forwards;
+      }
+      #titleScreen.is-starting .titleCar:nth-child(2) { animation-delay: .06s; }
+      #titleScreen.is-starting .titleCar:nth-child(3) { animation-delay: .12s; }
+
+      @keyframes titlePulseBlink {
+        0%, 48% { opacity: 1; filter: brightness(1.18); }
+        49%, 100% { opacity: .66; filter: brightness(.86); }
+      }
+
+      @keyframes titleCarRunLeft {
+        0% { translate: 0 0; opacity: 1; }
+        70% { opacity: 1; }
+        100% { translate: -145vw 0; opacity: 0; }
+      }
+
+      #gameRoot.is-menu #garageScreen .garageCard {
+        grid-template-rows: 20px minmax(58px, 1fr) 32px !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        padding: 4px 6px 5px !important;
+        row-gap: 2px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageName {
+        height: 20px !important;
+        min-height: 20px !important;
+        line-height: 20px !important;
+        font-size: clamp(15px, 2.55vw, 20px) !important;
+        letter-spacing: -0.6px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageMeta {
+        height: 20px !important;
+        min-height: 20px !important;
+        line-height: 18px !important;
+        min-width: 28px !important;
+        padding: 1px 4px !important;
+        font-size: clamp(11px, 1.9vw, 14px) !important;
+        letter-spacing: -0.45px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageSprite,
+      #gameRoot.is-menu #garageScreen .garageSprite.is-f1 {
+        width: clamp(48px, 8.8vw, 62px) !important;
+        height: clamp(96px, 17.8vw, 126px) !important;
+        transform: rotate(90deg) scale(.98) !important;
+        margin: 0 auto !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statBars {
+        height: 32px !important;
+        min-height: 32px !important;
+        padding: 3px 5px !important;
+        gap: 2px 6px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statLine {
+        font-size: clamp(9.5px, 1.58vw, 12.5px) !important;
+        line-height: 1.08 !important;
+        letter-spacing: -0.5px !important;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseMap {
+        height: clamp(46px, 11.5vh, 62px) !important;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseName {
+        font-size: clamp(14px, 2.45vw, 20px) !important;
+        line-height: 1.05 !important;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseMeta {
+        font-size: clamp(9.5px, 1.58vw, 12.5px) !important;
+        line-height: 1.18 !important;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarImage {
+        width: clamp(330px, 54vw, 500px) !important;
+        height: clamp(150px, 29vh, 220px) !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        transform: rotate(90deg) scale(.96) !important;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCourseMap {
+        min-height: clamp(120px, 28vh, 180px) !important;
+        height: clamp(120px, 28vh, 180px) !important;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarBox,
+      #gameRoot.is-menu #preRaceScreen .setupCourseBox {
+        min-height: clamp(132px, 32vh, 190px) !important;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarName,
+      #gameRoot.is-menu #preRaceScreen .setupCourseName,
+      #gameRoot.is-menu #preRaceScreen #setupCar,
+      #gameRoot.is-menu #preRaceScreen #setupCourse {
+        font-size: clamp(18px, 3.2vw, 27px) !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -3184,7 +3462,7 @@
     };
 
     const TOTAL_LAPS = 3;
-    const DRIVE_SPEED_SCALE = 0.62;
+    const DRIVE_SPEED_SCALE = 0.65;
     const WORLD_SCALE = 8;
     const STORAGE_PREFIX = "pocketPitRacer_best_";
     const OVERALL_BEST_KEY = "pocketPitRacer_best_overall";
@@ -3684,6 +3962,7 @@
     let speedItem = null;
     let speedBoostUntil = 0;
     let turboFuel = 0;
+    let turboFade = 0;
     let routeMetricsCache = null;
     let renderDirty = true;
     let lastIdleDraw = 0;
@@ -4458,15 +4737,16 @@
       }
       const speedRatio = clamp(player.speed / player.car.maxSpeed, 0, 1);
       const turboActive = input.turbo && turboFuel > 0;
-      const throttle = input.accelerate || turboActive;
-      const engineFreq = 72 + speedRatio * 190 + (throttle ? 28 : 0) + (turboActive ? 34 : 0);
+      const turboAudible = turboActive || turboFade > 0.08;
+      const throttle = input.accelerate || turboAudible;
+      const engineFreq = 72 + speedRatio * 190 + (throttle ? 28 : 0) + (turboAudible ? 34 : 0);
       const engineVolume = sfxEnabled
         ? (throttle ? 0.045 + speedRatio * 0.032 : 0.012 + speedRatio * 0.014)
         : 0;
       engineOsc.frequency.setTargetAtTime(engineFreq, audioCtx.currentTime, 0.035);
       engineGain.gain.setTargetAtTime(engineVolume, audioCtx.currentTime, 0.055);
       turboOsc.frequency.setTargetAtTime(380 + speedRatio * 320, audioCtx.currentTime, 0.035);
-      turboGain.gain.setTargetAtTime(sfxEnabled && turboActive ? 0.028 + speedRatio * 0.02 : 0, audioCtx.currentTime, 0.04);
+      turboGain.gain.setTargetAtTime(sfxEnabled && turboAudible ? (0.014 + speedRatio * 0.012) * (turboActive ? 1 : turboFade) : 0, audioCtx.currentTime, 0.04);
     }
 
     // --- Course -------------------------------------------------------------
@@ -4718,11 +4998,16 @@
       const turboActive = input.turbo && turboFuel > 0;
       if (turboActive) {
         turboFuel = Math.max(0, turboFuel - (scale * 16.666) / DRIVE_SPEED_SCALE);
-        speedBoostUntil = performance.now() + 80;
+        turboFade = 1;
+        speedBoostUntil = performance.now() + 120;
+      } else {
+        // Turbo does not cut instantly. Keep a short after-boost so the car eases back down.
+        turboFade = Math.max(0, turboFade - 0.028 * scale);
       }
-      const boostMultiplier = turboActive ? 1.9 : 1;
+      const turboPower = turboActive ? 1 : turboFade;
+      const boostMultiplier = 1 + 0.9 * turboPower;
       const maxSpeed = car.maxSpeed * boostMultiplier;
-      const acceleration = car.acceleration * boostMultiplier;
+      const acceleration = car.acceleration * (turboActive ? boostMultiplier : 1);
       const speedRatio = clamp(Math.abs(r.speed) / maxSpeed, 0, 1);
 
       if (input.accelerate || turboActive) {
@@ -5062,6 +5347,7 @@
     function finishRace() {
       speedBoostUntil = 0;
       turboFuel = 0;
+      turboFade = 0;
       raceElapsed = Math.round(player.finishTime);
       updateRankings();
       const finalPosition = player.position || 1;
@@ -5093,6 +5379,7 @@
       if (state !== GameState.RACING && state !== GameState.COUNTDOWN && state !== GameState.RETIRE_CONFIRM) return;
       speedBoostUntil = 0;
       turboFuel = 0;
+      turboFade = 0;
       raceElapsed = Math.round(state === GameState.RACING ? performance.now() - raceStartTime : raceElapsed);
       racers.forEach(r => {
         r.finished = true;
@@ -5281,7 +5568,7 @@
         card.className = `garageCard${selected ? " is-selected" : ""}${ownedCar ? "" : " is-locked"}`;
         const meta = ownedCar
           ? `${selected ? "SEL" : "OWN"}`
-          : `BUY ${car.cost}P`;
+          : `${car.cost}P`;
         const garageDisplayNames = {
           lamborghini: "Lambo",
           ferrari: "Ferrari",
@@ -5398,7 +5685,22 @@
       });
     }
 
-    bindButton("startMenuBtn", showGarage, "confirm");
+    function playTitleStartSequence() {
+      const titleScreen = document.getElementById("titleScreen");
+      if (!titleScreen || titleScreen.classList.contains("is-starting")) return;
+      if (bgmEnabled) initAudio();
+      playMenuSound("confirm");
+      setTimeout(() => blip(180, 0.18, "sawtooth", 0.045), 40);
+      setTimeout(() => blip(240, 0.22, "sawtooth", 0.040), 130);
+      setTimeout(() => blip(320, 0.18, "sawtooth", 0.034), 250);
+      titleScreen.classList.add("is-starting");
+      setTimeout(() => {
+        titleScreen.classList.remove("is-starting");
+        showGarage();
+      }, 820);
+    }
+
+    bindButton("startMenuBtn", playTitleStartSequence, null);
     bindButton("garageBackBtn", () => {
       setScreen(GameState.TITLE);
       ui.hint.textContent = "Turn, accelerate, and use TURBO for a short burst.";
