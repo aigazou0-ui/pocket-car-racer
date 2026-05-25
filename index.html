@@ -3590,6 +3590,60 @@
       }
     }
 
+
+    /* --- v13 adjustment: keep stat ranks vertically aligned while centering the whole stat block. --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #garageScreen .statBars {
+        display: grid !important;
+        grid-template-columns: max-content !important;
+        justify-content: center !important;
+        justify-items: center !important;
+        align-content: center !important;
+        align-items: center !important;
+        row-gap: 1px !important;
+        padding-left: 2px !important;
+        padding-right: 2px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statLine {
+        display: grid !important;
+        grid-template-columns: 39px 4px 14px !important;
+        justify-content: start !important;
+        justify-items: stretch !important;
+        align-items: center !important;
+        column-gap: 1px !important;
+        width: auto !important;
+        min-width: 58px !important;
+        max-width: 62px !important;
+        padding: 0 !important;
+        text-align: left !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statLabel {
+        text-align: right !important;
+        width: 39px !important;
+        min-width: 39px !important;
+        overflow: visible !important;
+        font-size: 10.5px !important;
+        letter-spacing: -0.4px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statColon {
+        text-align: center !important;
+        width: 4px !important;
+        min-width: 4px !important;
+        font-size: 10.5px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statRank {
+        text-align: center !important;
+        width: 14px !important;
+        min-width: 14px !important;
+        font-size: 12px !important;
+        line-height: 1 !important;
+      }
+    }
+
   </style>
 </head>
 <body>
