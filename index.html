@@ -3160,7 +3160,7 @@
       }
 
       #titleScreen.is-starting .titleCar {
-        animation: titleCarRunLeft .78s cubic-bezier(.2,.72,.18,1) forwards;
+        animation: titleCarRunLeft 1.18s cubic-bezier(.25,.68,.18,1) forwards;
       }
       #titleScreen.is-starting .titleCar:nth-child(2) { animation-delay: .06s; }
       #titleScreen.is-starting .titleCar:nth-child(3) { animation-delay: .12s; }
@@ -3259,6 +3259,105 @@
       #gameRoot.is-menu #preRaceScreen #setupCar,
       #gameRoot.is-menu #preRaceScreen #setupCourse {
         font-size: clamp(18px, 3.2vw, 27px) !important;
+      }
+    }
+
+
+    /* --- v8 final adjustment: slower title run, one-line garage stats, course/setup balance --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #gameRoot.is-menu #garageScreen .garageCard {
+        grid-template-rows: 22px minmax(64px, 1fr) 24px !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        padding: 4px 6px 5px !important;
+        row-gap: 2px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageName {
+        height: 22px !important;
+        line-height: 22px !important;
+        font-size: clamp(15px, 2.45vw, 19px) !important;
+        letter-spacing: -0.55px !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageMeta {
+        height: 22px !important;
+        min-height: 22px !important;
+        line-height: 20px !important;
+        padding: 1px 5px !important;
+        font-size: clamp(11px, 1.85vw, 14px) !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageSprite,
+      #gameRoot.is-menu #garageScreen .garageSprite.is-f1 {
+        width: clamp(48px, 8.8vw, 62px) !important;
+        height: clamp(100px, 18.6vw, 132px) !important;
+        transform: rotate(90deg) scale(.98) !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statBars {
+        height: 24px !important;
+        min-height: 24px !important;
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        grid-template-rows: 1fr !important;
+        padding: 4px 3px 3px !important;
+        gap: 0 2px !important;
+        align-items: center !important;
+        overflow: hidden !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statLine {
+        font-size: clamp(7.8px, 1.22vw, 9.8px) !important;
+        line-height: 1 !important;
+        letter-spacing: -0.55px !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseCard {
+        grid-template-rows: 18px minmax(56px, 1fr) auto auto !important;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseName {
+        height: 18px !important;
+        line-height: 18px !important;
+        font-size: clamp(12px, 2.05vw, 16px) !important;
+        letter-spacing: -0.45px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: clip !important;
+      }
+
+      #gameRoot.is-menu #courseScreen .courseMap {
+        height: clamp(54px, 12.6vh, 70px) !important;
+        margin: 1px 0 3px !important;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarPreview {
+        align-items: flex-start !important;
+        padding-top: 0 !important;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCarImage {
+        width: clamp(330px, 54vw, 500px) !important;
+        height: clamp(150px, 29vh, 220px) !important;
+        transform: translateY(-10px) rotate(90deg) scale(.96) !important;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCoursePreview {
+        grid-template-columns: minmax(128px, 1.08fr) minmax(0, .92fr) !important;
+        gap: 8px !important;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCourseMap {
+        min-height: clamp(122px, 28vh, 180px) !important;
+        height: clamp(122px, 28vh, 180px) !important;
+        width: 100% !important;
+      }
+
+      #gameRoot.is-menu #preRaceScreen .setupCourseText {
+        padding-top: 14px !important;
       }
     }
 
@@ -3569,10 +3668,10 @@
     ];
 
     const CPU_CONFIG = [
-      { carId: "rally", color: "#ff8f00", spriteId: "orange", name: "CPU-A", speed: 1.21, wobble: 0.12, offset: 0.05 },
-      { carId: "f1", color: "#8e44ad", spriteId: "purple", name: "CPU-B", speed: 1.29, wobble: 0.08, offset: 0.55 },
-      { carId: "kart", color: "#1e88e5", spriteId: "blue", name: "CPU-C", speed: 1.24, wobble: 0.10, offset: -0.45 },
-      { carId: "rally", color: "#2fb84f", spriteId: "green", name: "CPU-D", speed: 1.18, wobble: 0.13, offset: -0.08 }
+      { carId: "rally", color: "#ff8f00", spriteId: "orange", name: "CPU-A", speed: 1.21, wobble: 0.10, offset: 0.02 },
+      { carId: "f1", color: "#8e44ad", spriteId: "purple", name: "CPU-B", speed: 1.29, wobble: 0.07, offset: 0.18 },
+      { carId: "kart", color: "#1e88e5", spriteId: "blue", name: "CPU-C", speed: 1.24, wobble: 0.08, offset: -0.16 },
+      { carId: "rally", color: "#2fb84f", spriteId: "green", name: "CPU-D", speed: 1.18, wobble: 0.10, offset: -0.03 }
     ];
 
     const DIFFICULTIES = {
@@ -5061,8 +5160,8 @@
       } else {
         r.avoidBias = 0;
       }
-      const baseLane = r.laneOffset * 0.2 + (r.laneBias || 0) * 0.16;
-      const targetLane = clamp(baseLane + wobble * 0.06 + avoidanceLane + r.avoidBias, -0.62, 0.62);
+      const baseLane = r.laneOffset * 0.12 + (r.laneBias || 0) * 0.08;
+      const targetLane = clamp(baseLane + wobble * 0.035 + avoidanceLane + r.avoidBias, -0.48, 0.48);
       const target = roadCenterAt(targetProgress, targetLane);
       const targetAngle = angleToPoint(r, target);
       const upcomingTurn = angleDistance(tangentAngleAt(nearestProgress), tangentAngleAt(targetProgress));
@@ -5604,6 +5703,14 @@
       updateSettingsUi();
     }
 
+    function courseDisplayName(course) {
+      const shortNames = {
+        ridgeSwitch: "Ridge",
+        suzukaRhythm: "Suzuka"
+      };
+      return shortNames[course.id] || course.name;
+    }
+
     function renderCourseSelect() {
       ui.courseGrid.innerHTML = "";
       COURSES.forEach(course => {
@@ -5611,7 +5718,7 @@
         card.type = "button";
         card.className = `courseCard${course.id === selectedCourseId ? " is-selected" : ""}`;
         card.innerHTML = `
-          <div class="courseName">${course.name}</div>
+          <div class="courseName">${courseDisplayName(course)}</div>
           ${courseMapSvg(course)}
           <div class="courseMeta">${course.meta.split(" / ")[0]}</div>
           <div class="courseMeta courseBest">Best ${formatTime(getBest(selectedCarId, course.id))}</div>
@@ -5690,14 +5797,14 @@
       if (!titleScreen || titleScreen.classList.contains("is-starting")) return;
       if (bgmEnabled) initAudio();
       playMenuSound("confirm");
-      setTimeout(() => blip(180, 0.18, "sawtooth", 0.045), 40);
-      setTimeout(() => blip(240, 0.22, "sawtooth", 0.040), 130);
-      setTimeout(() => blip(320, 0.18, "sawtooth", 0.034), 250);
+      setTimeout(() => blip(170, 0.22, "sawtooth", 0.045), 60);
+      setTimeout(() => blip(220, 0.26, "sawtooth", 0.040), 220);
+      setTimeout(() => blip(290, 0.22, "sawtooth", 0.034), 430);
       titleScreen.classList.add("is-starting");
       setTimeout(() => {
         titleScreen.classList.remove("is-starting");
         showGarage();
-      }, 820);
+      }, 1220);
     }
 
     bindButton("startMenuBtn", playTitleStartSequence, null);

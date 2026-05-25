@@ -1,4 +1,4 @@
-const CACHE_NAME = "pocket-car-racer-v7-speed065-fx";
+const CACHE_NAME = "pocket-car-racer-v8-adjusted";
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -38,5 +38,3 @@ self.addEventListener("fetch", event => {
       .catch(() => caches.match(event.request).then(cached => cached || caches.match("./index.html")))
   );
 });
-
-// cache refresh v5
