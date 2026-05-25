@@ -3160,7 +3160,7 @@
       }
 
       #titleScreen.is-starting .titleCar {
-        animation: titleCarRunLeft 1.18s cubic-bezier(.25,.68,.18,1) forwards;
+        animation: titleCarRunLeft 1.95s cubic-bezier(.18,.62,.18,1) forwards;
       }
       #titleScreen.is-starting .titleCar:nth-child(2) { animation-delay: .06s; }
       #titleScreen.is-starting .titleCar:nth-child(3) { animation-delay: .12s; }
@@ -3358,6 +3358,113 @@
 
       #gameRoot.is-menu #preRaceScreen .setupCourseText {
         padding-top: 14px !important;
+      }
+    }
+
+
+    /* --- v9 adjustment: slower title run, garage stats under points, stronger CPU avoidance. --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      #titleScreen.is-starting .titleCar {
+        animation-duration: 1.95s !important;
+        animation-timing-function: cubic-bezier(.18,.62,.18,1) !important;
+      }
+
+      /* Garage card: name + points on top, car on the left, four stat rows under points on the right.
+         This removes the bottom stat strip, so the performance text cannot be clipped by the card bottom. */
+      #gameRoot.is-menu #garageScreen .garageCard {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) clamp(46px, 8.2vw, 64px) !important;
+        grid-template-rows: 23px minmax(0, 1fr) !important;
+        column-gap: 5px !important;
+        row-gap: 3px !important;
+        padding: 5px 6px 5px !important;
+        overflow: hidden !important;
+        contain: layout paint !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageName {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        height: 23px !important;
+        line-height: 23px !important;
+        font-size: clamp(15px, 2.45vw, 19px) !important;
+        letter-spacing: -0.6px !important;
+        text-align: left !important;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+        background: transparent !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageMeta {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        justify-self: stretch !important;
+        align-self: center !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        height: 23px !important;
+        line-height: 21px !important;
+        padding: 1px 2px !important;
+        font-size: clamp(10px, 1.7vw, 13px) !important;
+        letter-spacing: -0.45px !important;
+        text-align: center !important;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageSprite,
+      #gameRoot.is-menu #garageScreen .garageSprite.is-f1 {
+        grid-column: 1 !important;
+        grid-row: 2 !important;
+        align-self: center !important;
+        justify-self: center !important;
+        width: clamp(54px, 9.8vw, 72px) !important;
+        height: clamp(106px, 19.5vw, 146px) !important;
+        max-width: none !important;
+        max-height: none !important;
+        margin: 0 auto !important;
+        object-fit: contain !important;
+        transform: rotate(90deg) scale(.96) !important;
+        transform-origin: center center !important;
+        z-index: 1 !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statBars {
+        grid-column: 2 !important;
+        grid-row: 2 !important;
+        align-self: stretch !important;
+        justify-self: stretch !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: repeat(4, minmax(0, 1fr)) !important;
+        gap: 1px !important;
+        margin: 0 !important;
+        padding: 2px 2px !important;
+        border-top: 0 !important;
+        border-left: 1px solid rgba(240, 233, 167, .22) !important;
+        background: rgba(16, 25, 36, .86) !important;
+        overflow: hidden !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statLine {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 0 !important;
+        font-size: clamp(7.8px, 1.22vw, 9.8px) !important;
+        line-height: 1 !important;
+        letter-spacing: -0.55px !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statRank {
+        margin-left: 1px !important;
+        font-size: 1.05em !important;
       }
     }
 
@@ -5161,7 +5268,7 @@
         r.avoidBias = 0;
       }
       const baseLane = r.laneOffset * 0.12 + (r.laneBias || 0) * 0.08;
-      const targetLane = clamp(baseLane + wobble * 0.035 + avoidanceLane + r.avoidBias, -0.48, 0.48);
+      const targetLane = clamp(baseLane + wobble * 0.035 + avoidanceLane + r.avoidBias, -0.56, 0.56);
       const target = roadCenterAt(targetProgress, targetLane);
       const targetAngle = angleToPoint(r, target);
       const upcomingTurn = angleDistance(tangentAngleAt(nearestProgress), tangentAngleAt(targetProgress));
@@ -5214,8 +5321,8 @@
       const aheadY = Math.sin(tangent);
       const rightX = Math.cos(tangent + Math.PI / 2);
       const rightY = Math.sin(tangent + Math.PI / 2);
-      const scanDistance = d.roadWidth * 1.55;
-      const sideWindow = d.roadWidth * 0.66;
+      const scanDistance = d.roadWidth * 2.15;
+      const sideWindow = d.roadWidth * 0.86;
       let avoid = 0;
       racers.forEach(other => {
         if (other === r || other.finished) return;
@@ -5223,17 +5330,17 @@
         const dy = other.y - r.y;
         const forward = dx * aheadX + dy * aheadY;
         const side = dx * rightX + dy * rightY;
-        if (forward <= -r.radius * 0.45 || forward > scanDistance || Math.abs(side) > sideWindow) return;
+        if (forward <= -r.radius * 0.65 || forward > scanDistance || Math.abs(side) > sideWindow) return;
         let direction = side >= 0 ? -1 : 1;
         if (Math.abs(side) < r.radius * 0.35 && r.laneBias) {
           direction = r.laneBias > 0 ? 1 : -1;
         }
         const forwardPressure = 1 - clamp(Math.max(forward, 0) / scanDistance, 0, 1);
         const sidePressure = 1 - clamp(Math.abs(side) / sideWindow, 0, 1);
-        const playerPressure = other.kind === "player" ? 1.35 : 1.08;
-        avoid += direction * (0.24 + forwardPressure * 0.48 + sidePressure * 0.24) * playerPressure;
+        const playerPressure = other.kind === "player" ? 1.75 : 1.28;
+        avoid += direction * (0.32 + forwardPressure * 0.64 + sidePressure * 0.34) * playerPressure;
       });
-      return clamp(avoid, -0.68, 0.68);
+      return clamp(avoid, -0.95, 0.95);
     }
 
     function cpuBattlePace(r) {
@@ -5256,9 +5363,9 @@
       if (Math.abs(side) < cpu.radius * 0.35 && cpu.laneBias) {
         away = cpu.laneBias > 0 ? 1 : -1;
       }
-      const strength = other.kind === "player" ? 0.72 : 0.54;
-      const duration = other.kind === "player" ? 72 : 56;
-      cpu.avoidBias = clamp(cpu.avoidBias * 0.24 + away * strength, -0.72, 0.72);
+      const strength = other.kind === "player" ? 1.02 : 0.76;
+      const duration = other.kind === "player" ? 98 : 74;
+      cpu.avoidBias = clamp(cpu.avoidBias * 0.20 + away * strength, -1.0, 1.0);
       cpu.avoidBiasTimer = Math.max(cpu.avoidBiasTimer, duration);
     }
 
@@ -5797,14 +5904,14 @@
       if (!titleScreen || titleScreen.classList.contains("is-starting")) return;
       if (bgmEnabled) initAudio();
       playMenuSound("confirm");
-      setTimeout(() => blip(170, 0.22, "sawtooth", 0.045), 60);
-      setTimeout(() => blip(220, 0.26, "sawtooth", 0.040), 220);
-      setTimeout(() => blip(290, 0.22, "sawtooth", 0.034), 430);
+      setTimeout(() => blip(150, 0.28, "sawtooth", 0.044), 80);
+      setTimeout(() => blip(185, 0.36, "sawtooth", 0.040), 420);
+      setTimeout(() => blip(225, 0.34, "sawtooth", 0.034), 820);
       titleScreen.classList.add("is-starting");
       setTimeout(() => {
         titleScreen.classList.remove("is-starting");
         showGarage();
-      }, 1220);
+      }, 2020);
     }
 
     bindButton("startMenuBtn", playTitleStartSequence, null);

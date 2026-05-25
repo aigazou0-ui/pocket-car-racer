@@ -1,4 +1,4 @@
-const CACHE_NAME = "pocket-car-racer-v8-adjusted";
+const CACHE_NAME = "pocket-car-racer-v9-opening-garage-cpu";
 const CORE_ASSETS = [
   "./",
   "./index.html",
