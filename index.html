@@ -3468,6 +3468,67 @@
       }
     }
 
+
+    /* --- v11 adjustment: natural selected garage card color, aligned stat ranks, 1.5x race speed. --- */
+    @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+      /* Selected car: keep selection obvious, but avoid an unnatural yellow-filled card. */
+      #gameRoot.is-menu #garageScreen .garageCard.is-selected {
+        border-color: #f8d44a !important;
+        background:
+          linear-gradient(180deg, rgba(95, 135, 70, .34), rgba(24, 58, 38, .96) 42%, rgba(18, 42, 31, .98)) !important;
+        box-shadow:
+          inset 0 0 0 2px rgba(248, 212, 74, .86),
+          inset 0 0 18px rgba(248, 212, 74, .10),
+          0 0 0 1px rgba(5, 7, 10, .88) !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageCard.is-selected .garageName {
+        color: #fff8c9 !important;
+        text-shadow: 2px 2px 0 #05070a !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .garageCard.is-selected .garageMeta {
+        background: #284222 !important;
+        color: #f8d44a !important;
+        border: 1px solid rgba(248, 212, 74, .72) !important;
+        text-shadow: 1px 1px 0 #05070a !important;
+      }
+
+      /* Align S/A/B/C vertically by using fixed label/colon/rank columns. */
+      #gameRoot.is-menu #garageScreen .statLine {
+        display: grid !important;
+        grid-template-columns: minmax(25px, 1fr) 4px 10px !important;
+        align-items: center !important;
+        justify-items: stretch !important;
+        column-gap: 1px !important;
+        padding: 0 !important;
+        text-align: left !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statLabel {
+        display: block !important;
+        min-width: 0 !important;
+        overflow: hidden !important;
+        text-overflow: clip !important;
+        white-space: nowrap !important;
+        text-align: left !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statColon {
+        display: block !important;
+        text-align: center !important;
+      }
+
+      #gameRoot.is-menu #garageScreen .statRank {
+        display: block !important;
+        width: 10px !important;
+        margin-left: 0 !important;
+        text-align: center !important;
+        font-size: 1.12em !important;
+        line-height: 1 !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -3668,7 +3729,7 @@
     };
 
     const TOTAL_LAPS = 3;
-    const DRIVE_SPEED_SCALE = 0.65;
+    const DRIVE_SPEED_SCALE = 0.98;
     const WORLD_SCALE = 8;
     const STORAGE_PREFIX = "pocketPitRacer_best_";
     const OVERALL_BEST_KEY = "pocketPitRacer_best_overall";
@@ -5643,7 +5704,7 @@
 
     // --- UI -----------------------------------------------------------------
     function statBar(label, value) {
-      return `<div class="statLine">${label}:<span class="statRank">${value}</span></div>`;
+      return `<div class="statLine"><span class="statLabel">${label}</span><span class="statColon">:</span><span class="statRank">${value}</span></div>`;
     }
 
     function statRank(carId, statKey) {
