@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0c1017">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Pocket Car Racer">
+  <meta name="apple-mobile-web-app-title" content="Pocket Turbo Racer">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Pocket Car Racer</title>
+  <title>Pocket Turbo Racer</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -291,29 +291,35 @@
     .titlePanel {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(0, .95fr) minmax(210px, 1.05fr);
+      grid-template-columns: minmax(0, 1.22fr) minmax(180px, .78fr);
       align-items: center;
-      gap: clamp(8px, 2.5vw, 24px);
+      gap: clamp(4px, 1.2vw, 10px);
       width: 100%;
       height: 100%;
-      padding: clamp(12px, 2.6vw, 24px);
+      padding: clamp(10px, 2vw, 18px);
       overflow: hidden;
       border: 0;
       background:
-        linear-gradient(0deg, transparent 0 26%, #e8e0bc 26% 27%, #8f9692 27% 73%, #e8e0bc 73% 74%, transparent 74%),
+        linear-gradient(0deg, transparent 0 26%, #e8e0bc 26% 27%, #a8a8a8 27% 73%, #e8e0bc 73% 74%, transparent 74%),
         linear-gradient(0deg, transparent 0 38%, rgba(255,255,255,.26) 38% 39%, transparent 39% 61%, rgba(255,255,255,.22) 61% 62%, transparent 62%),
-        #69d414;
+        linear-gradient(0deg, #78df18 0 26%, transparent 26% 74%, #78df18 74% 100%);
       box-shadow: none;
     }
-
     .titlePanel::before {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        repeating-linear-gradient(0deg, rgba(6, 36, 9, .78) 0 3px, transparent 3px 12px) 0 0 / 100% 26% no-repeat,
-        repeating-linear-gradient(0deg, rgba(6, 36, 9, .78) 0 3px, transparent 3px 12px) 0 100% / 100% 26% no-repeat;
-      opacity: .82;
+        radial-gradient(circle, rgba(6, 36, 9, .96) 0 1.4px, transparent 1.7px) 0 0 / 18px 18px,
+        radial-gradient(circle, rgba(6, 36, 9, .96) 0 1.4px, transparent 1.7px) 9px 9px / 18px 18px;
+      background-repeat: repeat, repeat;
+      background-size: 18px 18px, 18px 18px;
+      background-position: 0 0, 9px 9px;
+      -webkit-mask:
+        linear-gradient(0deg, #000 0 26%, transparent 26% 74%, #000 74% 100%);
+      mask:
+        linear-gradient(0deg, #000 0 26%, transparent 26% 74%, #000 74% 100%);
+      opacity: 1;
       pointer-events: none;
     }
 
@@ -336,11 +342,13 @@
       z-index: 1;
       display: grid;
       align-content: center;
-      justify-items: start;
+      justify-items: stretch;
       gap: 0;
       text-align: left;
       min-width: 0;
-      padding-left: clamp(56px, 12vw, 122px);
+      width: 100%;
+      padding-left: clamp(34px, 5vw, 54px);
+      padding-right: 0;
     }
 
     .titleKicker {
@@ -360,6 +368,23 @@
       text-shadow:
         4px 4px 0 #8a2e2e,
         7px 7px 0 #05070a;
+      animation: titleLogoBlink 1.15s steps(1, end) infinite;
+    }
+
+    .titleLogoImage {
+      display: block;
+      width: min(100%, clamp(760px, 82vw, 1600px));
+      max-width: 100%;
+      height: auto;
+      margin: 0;
+      object-fit: contain;
+      image-rendering: auto;
+      filter: drop-shadow(6px 6px 0 rgba(0,0,0,.38));
+    }
+
+    @keyframes titleLogoBlink {
+      0%, 48% { opacity: 1; }
+      50%, 100% { opacity: .28; }
     }
 
     .titleSubtitle {
@@ -395,15 +420,15 @@
     }
 
     .titleCar {
-      width: clamp(34px, 5.6vw, 58px);
+      width: clamp(48px, 7.4vw, 82px);
       height: auto;
-      image-rendering: pixelated;
+      image-rendering: auto;
       filter: drop-shadow(5px 5px 0 rgba(0,0,0,.65));
       transform: rotate(90deg);
     }
 
     .titleCar.main {
-      width: clamp(38px, 6.2vw, 64px);
+      width: clamp(56px, 8.4vw, 92px);
     }
 
     .titleCar:nth-child(1) {
@@ -465,6 +490,7 @@
         justify-items: center;
         text-align: center;
         padding-left: 0;
+        padding-right: 0;
       }
 
       .titleGarage {
@@ -979,11 +1005,11 @@
 
     .setupCarPreview {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
       height: 100%;
-      padding-top: 6px;
+      padding-top: 10px;
     }
 
     .setupCarName,
@@ -997,28 +1023,30 @@
       width: clamp(240px, 34vw, 390px);
       height: clamp(108px, 16vw, 178px);
       object-fit: contain;
-      image-rendering: pixelated;
-      transform: rotate(90deg);
+      image-rendering: auto;
+      transform: translateY(-4px) rotate(90deg) scale(.96);
       filter: drop-shadow(5px 5px 0 rgba(0,0,0,.58));
     }
 
     .setupCoursePreview {
       display: grid;
-      grid-template-columns: minmax(128px, .62fr) minmax(0, 1.38fr);
-      align-items: stretch;
-      gap: 12px;
+      grid-template-columns: minmax(146px, .78fr) minmax(0, 1.22fr);
+      align-items: start;
+      gap: 10px;
       height: 100%;
-      transform: translateY(8px);
+      padding-top: 10px;
+      transform: none;
     }
 
     .setupCourseText {
-      padding-top: 26px;
+      padding-top: 2px;
     }
 
     .setupCourseMap {
       height: 100%;
-      min-height: 92px;
-      margin-top: 0;
+      min-height: 106px;
+      margin-top: 14px;
+      align-self: start;
     }
 
     .segmented {
@@ -1408,19 +1436,25 @@
 
       .titlePanel {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4px;
-        padding: 8px 12px;
+        grid-template-columns: 1.18fr .82fr;
+        gap: 2px;
+        padding: 8px 10px;
       }
 
       .titleContent {
-        padding-left: clamp(52px, 8vw, 76px);
+        padding-left: clamp(30px, 4vw, 42px);
+        padding-right: 0;
       }
 
       .titleLogo {
         font-size: clamp(38px, 7.2vw, 66px);
         line-height: .86;
         text-shadow: 3px 3px 0 #8a2e2e, 5px 5px 0 #05070a;
+      }
+
+      .titleLogoImage {
+        width: min(100%, clamp(300px, 62vw, 700px));
+        max-width: 100%;
       }
 
       .titlePanel::after {
@@ -1443,7 +1477,7 @@
 
       .titleCar,
       .titleCar.main {
-        width: clamp(32px, 5.2vw, 48px);
+        width: clamp(42px, 6.2vw, 64px);
       }
 
       .titleBtn {
@@ -1676,19 +1710,25 @@
       }
 
       #gameRoot.is-menu .titlePanel {
-        grid-template-columns: .95fr 1.05fr;
-        padding: 5px 8px;
-        gap: 2px;
+        grid-template-columns: 1.16fr .84fr;
+        padding: 4px 6px;
+        gap: 1px;
       }
 
       #gameRoot.is-menu .titleContent {
-        padding-left: clamp(42px, 7vw, 64px);
+        padding-left: clamp(22px, 3vw, 34px);
+        padding-right: 0;
       }
 
       #gameRoot.is-menu .titleLogo {
         font-size: clamp(32px, 6.5vw, 58px);
         line-height: .82;
         text-shadow: 2px 2px 0 #8a2e2e, 4px 4px 0 #05070a;
+      }
+
+      #gameRoot.is-menu .titleLogoImage {
+        width: min(100%, clamp(560px, 74vw, 1200px));
+        max-width: 100%;
       }
 
       #gameRoot.is-menu .titlePanel::after {
@@ -1707,7 +1747,7 @@
 
       #gameRoot.is-menu .titleCar,
       #gameRoot.is-menu .titleCar.main {
-        width: clamp(24px, 4.2vw, 42px);
+        width: clamp(36px, 5.4vw, 56px);
       }
 
       #gameRoot.is-menu .titleCar:nth-child(1) { transform: translateY(-30%) rotate(90deg); }
@@ -3336,28 +3376,31 @@
 
       #gameRoot.is-menu #preRaceScreen .setupCarPreview {
         align-items: flex-start !important;
-        padding-top: 0 !important;
+        padding-top: 4px !important;
       }
 
       #gameRoot.is-menu #preRaceScreen .setupCarImage {
         width: clamp(330px, 54vw, 500px) !important;
         height: clamp(150px, 29vh, 220px) !important;
-        transform: translateY(-10px) rotate(90deg) scale(.96) !important;
+        transform: translateY(-6px) rotate(90deg) scale(.96) !important;
       }
 
       #gameRoot.is-menu #preRaceScreen .setupCoursePreview {
-        grid-template-columns: minmax(128px, 1.08fr) minmax(0, .92fr) !important;
+        grid-template-columns: minmax(138px, 1.02fr) minmax(0, .98fr) !important;
         gap: 8px !important;
+        padding-top: 4px !important;
       }
 
       #gameRoot.is-menu #preRaceScreen .setupCourseMap {
         min-height: clamp(122px, 28vh, 180px) !important;
         height: clamp(122px, 28vh, 180px) !important;
         width: 100% !important;
+        margin-top: 10px !important;
+        align-self: start !important;
       }
 
       #gameRoot.is-menu #preRaceScreen .setupCourseText {
-        padding-top: 14px !important;
+        padding-top: 2px !important;
       }
     }
 
@@ -3644,12 +3687,52 @@
       }
     }
 
+  
+    /* PTR v12 minimal fix: make title car run animation work on PC localhost as well as mobile */
+    #titleScreen.is-starting .titleCar {
+      animation: titleCarRunLeft 1.95s cubic-bezier(.18,.62,.18,1) forwards !important;
+    }
+    #titleScreen.is-starting .titleCar:nth-child(2) { animation-delay: .06s !important; }
+    #titleScreen.is-starting .titleCar:nth-child(3) { animation-delay: .12s !important; }
+
+    @keyframes titleCarRunLeft {
+      0% { translate: 0 0; opacity: 1; }
+      70% { opacity: 1; }
+      100% { translate: -145vw 0; opacity: 0; }
+    }
+
+  
+    
+  
+    /* PTR v14 fallback: slower transform-based title run */
+    #titleScreen.is-starting .titleCar {
+      animation: titleCarRunTransformV14 2.35s cubic-bezier(.16,.72,.14,1) forwards !important;
+    }
+    #titleScreen.is-starting .titleCar:nth-child(2) { animation-delay: .11s !important; }
+    #titleScreen.is-starting .titleCar:nth-child(3) { animation-delay: .22s !important; }
+
+    @keyframes titleCarRunTransformV14 {
+      0% {
+        opacity: 1;
+      }
+      72% {
+        opacity: 1;
+      }
+      93% {
+        opacity: .82;
+      }
+      100% {
+        transform: translateX(-165vw) rotate(90deg);
+        opacity: 0;
+      }
+    }
+
   </style>
 </head>
 <body>
   <div id="portraitMessage">スマホを横向きにして遊んでください</div>
 
-  <main id="gameRoot" aria-label="Pocket Car Racer game">
+  <main id="gameRoot" aria-label="Pocket Turbo Racer game">
     <section class="hud" aria-label="race status">
       <div class="hudItem" id="lapHud">Lap - / 3</div>
       <div class="hudItem" id="timeHud">Time 0:00.000</div>
@@ -3674,14 +3757,14 @@
         <div class="screen titleScreen is-visible" id="titleScreen">
           <div class="panel titlePanel">
             <div class="titleContent">
-              <p class="titleKicker">F1 CLASS / 5 CAR GRAND PRIX</p>
-              <h1 class="titleLogo">Pocket<br>Car Racer</h1>
+              <p class="titleKicker">TURBO CLASS / 6 CAR GRAND PRIX</p>
+              <img class="titleLogo titleLogoImage" src="assets/ui/title-logo-v25-cropped.png" alt="Pocket Turbo Racer">
             </div>
             <div class="titleGarage">
               <div class="titleCars" aria-hidden="true">
                 <img class="titleCar" src="assets/cars/blue.png" alt="">
-                <img class="titleCar main" src="assets/cars/shop/nsx.png" alt="">
-                <img class="titleCar" src="assets/cars/title/ferrari-yellow.png" alt="">
+                <img class="titleCar main" src="assets/cars/shop/aero.png" alt="">
+                <img class="titleCar" src="assets/cars/title/crux-title.png" alt="">
               </div>
               <div class="titleActions">
                 <button class="menuBtn titleBtn" id="startMenuBtn">START</button>
@@ -3739,7 +3822,7 @@
             <div class="setupGrid">
               <div class="setupBox setupCarBox">
                 <div class="setupLabel">CAR</div>
-                <div id="setupCar">NSX</div>
+                <div id="setupCar">AERO</div>
               </div>
               <div class="setupBox setupCourseBox">
                 <div class="setupLabel">COURSE</div>
@@ -3846,18 +3929,18 @@
     const TOTAL_LAPS = 3;
     const DRIVE_SPEED_SCALE = 0.98;
     const WORLD_SCALE = 8;
-    const STORAGE_PREFIX = "pocketPitRacer_best_";
-    const OVERALL_BEST_KEY = "pocketPitRacer_best_overall";
-    const POINTS_KEY = "pocketPitRacer_points";
-    const POINTS_TEST_RESET_KEY = "pocketPitRacer_pointsTestResetV1";
-    const OWNED_CARS_KEY = "pocketPitRacer_ownedCars";
-    const SELECTED_PLAYER_CAR_KEY = "pocketPitRacer_selectedPlayerCar";
-    const DIFFICULTY_KEY = "pocketPitRacer_difficulty";
-    const BGM_ENABLED_KEY = "pocketPitRacer_bgmEnabled";
-    const SFX_ENABLED_KEY = "pocketPitRacer_sfxEnabled";
-    const PURCHASE_RESET_KEY = "pocketPitRacer_purchaseResetV2";
-    const STARTER_CAR_MIGRATION_KEY = "pocketPitRacer_starterCarV3";
-    const DEFAULT_PLAYER_CAR_ID = "nsx";
+    const STORAGE_PREFIX = "pocketTurboRacer_best_";
+    const OVERALL_BEST_KEY = "pocketTurboRacer_best_overall";
+    const POINTS_KEY = "pocketTurboRacer_points";
+    const POINTS_TEST_RESET_KEY = "pocketTurboRacer_pointsTestResetV1";
+    const OWNED_CARS_KEY = "pocketTurboRacer_ownedCars";
+    const SELECTED_PLAYER_CAR_KEY = "pocketTurboRacer_selectedPlayerCar";
+    const DIFFICULTY_KEY = "pocketTurboRacer_difficulty";
+    const BGM_ENABLED_KEY = "pocketTurboRacer_bgmEnabled";
+    const SFX_ENABLED_KEY = "pocketTurboRacer_sfxEnabled";
+    const PURCHASE_RESET_KEY = "pocketTurboRacer_purchaseResetV2";
+    const STARTER_CAR_MIGRATION_KEY = "pocketTurboRacer_starterCarV3";
+    const DEFAULT_PLAYER_CAR_ID = "aero";
     const TURBO_MAX_MS = 10000;
     const TURBO_SEGMENT_MS = 1000;
     const BGM_MASTER_VOLUME = 0.62;
@@ -3906,9 +3989,9 @@
     // lower grip and higher drift make the car slide more.
     const CARS = [
       {
-        id: "f1",
-        name: "Formula",
-        type: "F1",
+        id: "bolt",
+        name: "AERO",
+        type: "Aero",
         desc: "Fastest on straights. Brake early, then fire out.",
         maxSpeed: 6.2,
         acceleration: 0.15,
@@ -3918,7 +4001,7 @@
         drift: 0.05,
         bodyColor: "#e53935",
         offroadPenalty: 0.54,
-        spriteId: "player"
+        spriteId: "bolt"
       },
       {
         id: "rally",
@@ -3952,10 +4035,21 @@
 
     const CPU_CONFIG = [
       { carId: "rally", color: "#ff8f00", spriteId: "orange", name: "CPU-A", speed: 1.21, wobble: 0.10, offset: 0.02 },
-      { carId: "f1", color: "#8e44ad", spriteId: "purple", name: "CPU-B", speed: 1.29, wobble: 0.07, offset: 0.18 },
+      { carId: "bolt", color: "#8e44ad", spriteId: "purple", name: "CPU-B", speed: 1.29, wobble: 0.07, offset: 0.18 },
       { carId: "kart", color: "#1e88e5", spriteId: "blue", name: "CPU-C", speed: 1.24, wobble: 0.08, offset: -0.16 },
       { carId: "rally", color: "#2fb84f", spriteId: "green", name: "CPU-D", speed: 1.18, wobble: 0.10, offset: -0.03 }
     ];
+
+    const CPU_COURSE_LINE_TUNING = {
+      lakesideGp: { lineScale: 1.00 },
+      harborBend: { lineScale: 0.96 },
+      speedBowl: { lineScale: 0.82 },
+      aeroCanyon: { lineScale: 0.90 },
+      neonEsses: { lineScale: 0.88 },
+      ridgeSwitch: { lineScale: 0.88 },
+      fujiCrest: { lineScale: 0.90 },
+      suzukaRhythm: { lineScale: 0.88 }
+    };
 
     const DIFFICULTIES = {
       easy: { label: "EASY", multiplier: 0.88 },
@@ -3964,28 +4058,28 @@
     };
 
     const CPU_VEHICLE_POOL = [
-      { carId: "f1", spriteId: "f1" },
-      { carId: "nsx", spriteId: "nsx" },
-      { carId: "ferrari", spriteId: "ferrari" },
-      { carId: "lamborghini", spriteId: "lamborghini" },
-      { carId: "gtr", spriteId: "gtr" },
-      { carId: "porsche", spriteId: "porsche" }
+      { carId: "bolt", spriteId: "bolt" },
+      { carId: "aero", spriteId: "aero" },
+      { carId: "crux", spriteId: "crux" },
+      { carId: "vela", spriteId: "vela" },
+      { carId: "nova", spriteId: "nova" },
+      { carId: "dart", spriteId: "dart" }
     ];
 
     const CPU_COLOR_POOL = [
-      { color: "#1e88e5", f1SpriteId: "blue" },
-      { color: "#2fb84f", f1SpriteId: "green" },
-      { color: "#f8c62b", f1SpriteId: "orange" },
-      { color: "#242424", f1SpriteId: "black" }
+      { color: "#1e88e5", boltSpriteId: "blue" },
+      { color: "#2fb84f", boltSpriteId: "green" },
+      { color: "#f8c62b", boltSpriteId: "orange" },
+      { color: "#242424", boltSpriteId: "black" }
     ];
 
     const PLAYER_CARS = [
-      { id: "nsx", name: "NSX", spriteId: "nsx", cost: 0, speedMultiplier: 1.00, acceleration: 0.150, turnSpeed: 0.050, grip: 0.94, drift: 0.055 },
-      { id: "gtr", name: "GTR", spriteId: "gtr", cost: 10, speedMultiplier: 1.05, acceleration: 0.160, turnSpeed: 0.048, grip: 0.96, drift: 0.040 },
-      { id: "porsche", name: "Porsche", spriteId: "porsche", cost: 30, speedMultiplier: 1.10, acceleration: 0.145, turnSpeed: 0.057, grip: 0.97, drift: 0.035 },
-      { id: "ferrari", name: "Ferrari", spriteId: "ferrari", cost: 50, speedMultiplier: 1.15, acceleration: 0.155, turnSpeed: 0.052, grip: 0.94, drift: 0.050 },
-      { id: "lamborghini", name: "Lamborghini", spriteId: "lamborghini", cost: 70, speedMultiplier: 1.20, acceleration: 0.165, turnSpeed: 0.046, grip: 0.92, drift: 0.065 },
-      { id: "f1", name: "F1", spriteId: "player", cost: 100, speedMultiplier: 1.25, acceleration: 0.150, turnSpeed: 0.040, grip: 0.88, drift: 0.085 }
+      { id: "aero", name: "AERO", spriteId: "aero", cost: 0, speedMultiplier: 1.00, acceleration: 0.150, turnSpeed: 0.050, grip: 0.94, drift: 0.055 },
+      { id: "nova", name: "NOVA", spriteId: "nova", cost: 10, speedMultiplier: 1.05, acceleration: 0.160, turnSpeed: 0.048, grip: 0.96, drift: 0.040 },
+      { id: "dart", name: "DART", spriteId: "dart", cost: 30, speedMultiplier: 1.10, acceleration: 0.145, turnSpeed: 0.057, grip: 0.97, drift: 0.035 },
+      { id: "crux", name: "CRUX", spriteId: "crux", cost: 50, speedMultiplier: 1.15, acceleration: 0.155, turnSpeed: 0.052, grip: 0.94, drift: 0.050 },
+      { id: "vela", name: "VELA", spriteId: "vela", cost: 70, speedMultiplier: 1.20, acceleration: 0.165, turnSpeed: 0.046, grip: 0.92, drift: 0.065 },
+      { id: "bolt", name: "BOLT", spriteId: "bolt", cost: 100, speedMultiplier: 1.25, acceleration: 0.150, turnSpeed: 0.040, grip: 0.88, drift: 0.085 }
     ];
 
     // Adjust course shape and collision here. All values are relative to canvas.
@@ -4001,7 +4095,7 @@
     const COURSES = [
       makeCourse({
         id: "lakesideGp",
-        name: "Lakeside GP",
+        name: "SUN",
         meta: "Balanced / Flow",
         roadWidthScale: 1.0,
         cpuSpeedScale: 1.0,
@@ -4025,7 +4119,7 @@
       }),
       makeCourse({
         id: "harborBend",
-        name: "Harbor Bend",
+        name: "PINE",
         meta: "Balanced / Rhythm",
         roadWidthScale: 1.0,
         cpuSpeedScale: 1.0,
@@ -4049,7 +4143,7 @@
       }),
       makeCourse({
         id: "speedBowl",
-        name: "Speed Bowl",
+        name: "DOCK",
         meta: "Fast / Big Arcs",
         roadWidthScale: 1.12,
         cpuSpeedScale: 1.05,
@@ -4070,7 +4164,7 @@
       }),
       makeCourse({
         id: "aeroCanyon",
-        name: "Aero Canyon",
+        name: "DUNE",
         meta: "Fast / Sweepers",
         roadWidthScale: 1.08,
         cpuSpeedScale: 1.04,
@@ -4092,7 +4186,7 @@
       }),
       makeCourse({
         id: "neonEsses",
-        name: "Neon Esses",
+        name: "LUNA",
         meta: "Technical / Esses",
         roadWidthScale: 0.9,
         cpuSpeedScale: 0.94,
@@ -4118,7 +4212,7 @@
       }),
       makeCourse({
         id: "ridgeSwitch",
-        name: "Ridge Switch",
+        name: "RIDGE",
         meta: "Technical / Hairpins",
         roadWidthScale: 0.94,
         cpuSpeedScale: 0.98,
@@ -4144,7 +4238,7 @@
       }),
       makeCourse({
         id: "fujiCrest",
-        name: "Fuji Crest",
+        name: "NEON",
         meta: "Circuit / Hairpin",
         roadWidthScale: 1.02,
         cpuSpeedScale: 1.02,
@@ -4167,7 +4261,7 @@
       }),
       makeCourse({
         id: "suzukaRhythm",
-        name: "Suzuka Rhythm",
+        name: "SKY",
         meta: "Circuit / Rhythm",
         roadWidthScale: 0.98,
         cpuSpeedScale: 0.99,
@@ -4194,19 +4288,19 @@
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
     const carSprites = {
-      player: loadSprite("assets/cars/red2.png"),
-      red: loadSprite("assets/cars/red2.png"),
+      player: loadSprite("assets/cars/bolt.png"),
+      red: loadSprite("assets/cars/bolt.png"),
       blue: loadSprite("assets/cars/blue.png"),
       green: loadSprite("assets/cars/green.png"),
       orange: loadSprite("assets/cars/orange.png"),
       purple: loadSprite("assets/cars/purple.png"),
       black: loadSprite("assets/cars/black.png"),
       cyan: loadSprite("assets/cars/cyan.png"),
-      nsx: loadSprite("assets/cars/shop/nsx.png"),
-      ferrari: loadSprite("assets/cars/shop/ferrari.png"),
-      lamborghini: loadSprite("assets/cars/shop/lamborghini.png"),
-      gtr: loadSprite("assets/cars/shop/gtr.png"),
-      porsche: loadSprite("assets/cars/shop/porsche.png")
+      aero: loadSprite("assets/cars/shop/aero.png"),
+      crux: loadSprite("assets/cars/shop/crux.png"),
+      vela: loadSprite("assets/cars/shop/vela.png"),
+      nova: loadSprite("assets/cars/shop/nova.png"),
+      dart: loadSprite("assets/cars/shop/dart.png")
     };
     const tintedSprites = new Map();
 
@@ -4511,7 +4605,7 @@
 
     function loadSelectedPlayerCar() {
       let saved = localStorage.getItem(SELECTED_PLAYER_CAR_KEY) || DEFAULT_PLAYER_CAR_ID;
-      if (!localStorage.getItem(STARTER_CAR_MIGRATION_KEY) && (saved === "f1" || saved === "porsche")) {
+      if (!localStorage.getItem(STARTER_CAR_MIGRATION_KEY) && (saved === "bolt" || saved === "dart")) {
         saved = DEFAULT_PLAYER_CAR_ID;
         localStorage.setItem(SELECTED_PLAYER_CAR_KEY, saved);
       }
@@ -4544,7 +4638,7 @@
       renderGarage();
       updateHud();
       setScreen(GameState.TITLE);
-      ui.hint.textContent = "Save data reset. NSX is ready.";
+      ui.hint.textContent = "Save data reset. AERO is ready.";
     }
 
     function setScreen(nextState) {
@@ -5299,17 +5393,42 @@
         exitTimer: 0,
         progress: 0,
         rankScore: 0,
+        raceDistance: 0,
+        position: 0,
         waypointIndex: 0,
         laneOffset,
         // Car-to-car contact tuned one step back from the strongest setting.
         // Visual car size stays the same, with a firm but not excessive collision range.
-        radius: kind === "player" ? 38 : 36,
+        radius: kind === "bolt" ? 38 : 36,
         collisionCooldown: 0,
         avoidBias: 0,
         avoidBiasTimer: 0,
         laneBias: 0,
-        stuckTimer: 0
+        cpuLineLane: laneOffset * 0.06,
+        stuckTimer: 0,
+        offroadActive: false,
+        debugStats: makeCpuDebugStats()
       };
+    }
+
+    function makeCpuDebugStats() {
+      return {
+        offroadCount: 0,
+        wallHitCount: 0,
+        spinCount: 0,
+        maxAngleChange: 0,
+        stuckCount: 0,
+        finishLap: 0,
+        rankError: false
+      };
+    }
+
+    function resetCpuDebugStats() {
+      racers.forEach(r => {
+        r.debugStats = makeCpuDebugStats();
+        r.offroadActive = false;
+        r.lastDebugAngle = r.moveAngle || r.angle || 0;
+      });
     }
 
     function resetRaceObjects(resetTimers) {
@@ -5320,7 +5439,7 @@
       const playerGrid = startGrid[playerGridIndex];
       const start = roadCenterAt(playerGrid.progress, playerGrid.lane);
       const startAngle = tangentAngleAt(playerGrid.progress);
-      player = makeRacer("player", car, start.x, start.y, startAngle, playerGrid.lane);
+      player = makeRacer("bolt", car, start.x, start.y, startAngle, playerGrid.lane);
       player.moveAngle = startAngle;
       player.progress = playerGrid.progress;
 
@@ -5333,13 +5452,13 @@
         const vehicle = randomCpuVehicles[index] || CPU_VEHICLE_POOL[index % CPU_VEHICLE_POOL.length];
         const colorSet = randomCpuColors[index] || CPU_COLOR_POOL[index % CPU_COLOR_POOL.length];
         const cpuBaseCar = getCar(vehicle.carId);
-        const spriteId = vehicle.carId === "f1" ? colorSet.f1SpriteId : vehicle.spriteId;
+        const spriteId = vehicle.carId === "bolt" ? colorSet.boltSpriteId : vehicle.spriteId;
         const cpuCar = {
           ...cpuBaseCar,
           maxSpeed: cpuBaseCar.maxSpeed,
           bodyColor: colorSet.color,
           spriteId,
-          tintColor: vehicle.carId === "f1" ? null : colorSet.color,
+          tintColor: vehicle.carId === "bolt" ? null : colorSet.color,
           cpuSpeed: cpu.speed * DIFFICULTIES[selectedDifficulty].multiplier * (course.cpuSpeedScale || 1),
           cpuCornerScale: course.cpuCornerScale || 1,
           cpuWobble: cpu.wobble
@@ -5355,6 +5474,7 @@
         racers.push(racer);
       });
 
+      updateRankings();
       if (resetTimers) {
         raceStartTime = 0;
         raceElapsed = 0;
@@ -5430,11 +5550,16 @@
       }
       r.prevX = r.x;
       r.prevY = r.y;
+      const previousDebugAngle = r.lastDebugAngle ?? r.moveAngle ?? r.angle;
+      if (r.collisionCooldown > 0) r.collisionCooldown = Math.max(0, r.collisionCooldown - scale);
 
       const wobble = Math.sin(time * 0.0017 + r.laneOffset * 18) * (r.car.cpuWobble || 0.1);
       const nearestProgress = nearestTrackProgress(r.x, r.y);
       const nearestIndex = waypointIndexForProgress(nearestProgress);
-      const lookAhead = clamp(Math.floor(8 + Math.abs(r.speed) * 1.35), 9, 22);
+      const line = cpuRacingLine(nearestProgress);
+      const curveStrength = line.strength;
+      const lookAheadBase = 10 + Math.abs(r.speed) * 1.12;
+      const lookAhead = clamp(Math.floor(lookAheadBase - curveStrength * 7), 7, 21);
       const targetIndex = (nearestIndex + lookAhead) % cpWaypoints.length;
       const targetProgress = targetIndex / cpWaypoints.length;
       const avoidanceLane = cpuAvoidanceLane(r, nearestProgress);
@@ -5443,17 +5568,21 @@
       } else {
         r.avoidBias = 0;
       }
-      const baseLane = r.laneOffset * 0.12 + (r.laneBias || 0) * 0.08;
-      const targetLane = clamp(baseLane + wobble * 0.035 + avoidanceLane + r.avoidBias, -0.56, 0.56);
+      const baseLane = r.laneOffset * 0.055 + (r.laneBias || 0) * 0.035;
+      const desiredLineLane = clamp(baseLane + line.lane + wobble * 0.014, -0.38, 0.38);
+      r.cpuLineLane = lerp(r.cpuLineLane || 0, desiredLineLane, clamp((0.038 + curveStrength * 0.025) * scale, 0, 0.13));
+      const targetLane = clamp(r.cpuLineLane + avoidanceLane + r.avoidBias, -0.44, 0.44);
       const target = roadCenterAt(targetProgress, targetLane);
       const targetAngle = angleToPoint(r, target);
       const upcomingTurn = angleDistance(tangentAngleAt(nearestProgress), tangentAngleAt(targetProgress));
-      r.angle = angleLerp(r.angle, targetAngle + wobble * 0.025, 0.12 * scale);
-      r.moveAngle = angleLerp(r.moveAngle, r.angle, (0.11 + (1 - r.car.grip) * 0.52) * scale);
+      const steerResponse = clamp((0.086 + curveStrength * 0.028) * scale, 0, 0.16);
+      r.angle = angleLerp(r.angle, targetAngle + wobble * 0.012, steerResponse);
+      r.moveAngle = angleLerp(r.moveAngle, r.angle, clamp((0.10 + (1 - r.car.grip) * 0.34) * scale, 0, 0.18));
 
       const turnAmount = angleDistance(r.moveAngle, targetAngle);
       const cornerScale = r.car.cpuCornerScale || 1;
-      const cornerSlowdown = clamp(1 - turnAmount * 0.18 * cornerScale - upcomingTurn * 0.35 * cornerScale, 0.64, 1);
+      const exitBoost = 1 + line.exit * 0.035;
+      const cornerSlowdown = clamp(1 - turnAmount * 0.14 * cornerScale - upcomingTurn * 0.24 * cornerScale - curveStrength * 0.08, 0.62, 1) * exitBoost;
       const desiredSpeed = r.car.maxSpeed * (r.car.cpuSpeed || 0.92) * cornerSlowdown * cpuBattlePace(r);
       r.speed = lerp(r.speed, desiredSpeed, 0.062 * scale);
       r.x += Math.cos(r.moveAngle) * r.speed * scale;
@@ -5468,6 +5597,48 @@
       handleCourseCollision(r);
       updateLapProgress(r);
       recoverCpuIfStuck(r, scale);
+      recordCpuAngleStats(r, previousDebugAngle);
+    }
+
+    function cpuRacingLine(progress) {
+      const tuning = CPU_COURSE_LINE_TUNING[currentCourse().id] || { lineScale: 0.88 };
+      const a0 = tangentAngleAt(progress);
+      const aEntry = tangentAngleAt(wrapProgress(progress + 0.030));
+      const aMid = tangentAngleAt(wrapProgress(progress + 0.070));
+      const aExit = tangentAngleAt(wrapProgress(progress + 0.125));
+      const entryTurn = signedAngleDelta(a0, aEntry);
+      const midTurn = signedAngleDelta(aEntry, aMid);
+      const exitTurn = signedAngleDelta(aMid, aExit);
+      const combinedTurn = entryTurn * 0.50 + midTurn * 0.95 + exitTurn * 0.55;
+      const turnDir = Math.sign(combinedTurn || midTurn || entryTurn || exitTurn);
+      const strength = clamp(Math.max(Math.abs(entryTurn), Math.abs(midTurn), Math.abs(exitTurn) * 0.85), 0, 1.35);
+      if (!turnDir || strength < 0.08) {
+        return { lane: 0, strength: 0, exit: 0 };
+      }
+
+      const approach = clamp((Math.abs(exitTurn) - Math.abs(entryTurn) * 0.35) / 0.58, 0, 1);
+      const apex = clamp((Math.abs(midTurn) + Math.abs(entryTurn) * 0.45) / 0.70, 0, 1);
+      const exit = clamp((Math.abs(entryTurn) - Math.abs(exitTurn) * 0.55) / 0.58, 0, 1);
+      const phaseTotal = approach + apex + exit || 1;
+      const outsideWeight = (approach * 0.95 + exit * 0.58) / phaseTotal;
+      const insideWeight = apex / phaseTotal;
+      const amount = clamp(0.12 + strength * 0.24, 0.10, 0.34) * tuning.lineScale;
+      const lane = turnDir * amount * (insideWeight - outsideWeight * 0.72);
+      return {
+        lane: clamp(lane, -0.34, 0.34),
+        strength,
+        exit
+      };
+    }
+
+    function recordCpuAngleStats(r, previousAngle) {
+      if (r.kind !== "cpu") return;
+      const delta = angleDistance(previousAngle, r.moveAngle || r.angle);
+      r.lastDebugAngle = r.moveAngle || r.angle;
+      if (r.collisionCooldown > 0) return;
+      const stats = r.debugStats || (r.debugStats = makeCpuDebugStats());
+      stats.maxAngleChange = Math.max(stats.maxAngleChange, delta);
+      if (delta > 0.72) stats.spinCount += 1;
     }
 
     function updateFinishedRacer(r, scale) {
@@ -5478,7 +5649,7 @@
         return;
       }
       const exitSpeed = Math.max(Math.abs(r.speed), r.car.maxSpeed * 0.58);
-      const fadeLane = -0.08 + (r.kind === "player" ? 0.08 : (r.laneOffset || 0) * 0.16);
+      const fadeLane = -0.08 + (r.kind === "bolt" ? 0.08 : (r.laneOffset || 0) * 0.16);
       const fadeProgress = wrapProgress(r.progress + 0.004 * scale);
       const target = roadCenterAt(fadeProgress, fadeLane);
       const targetAngle = angleToPoint(r, target);
@@ -5498,10 +5669,10 @@
       const rightX = Math.cos(tangent + Math.PI / 2);
       const rightY = Math.sin(tangent + Math.PI / 2);
       const scanDistance = d.roadWidth * 2.15;
-      const sideWindow = d.roadWidth * 0.86;
+      const sideWindow = d.roadWidth * 0.74;
       let avoid = 0;
       racers.forEach(other => {
-        if (other === r || other.finished) return;
+        if (other === r || other.finished || other.kind !== "cpu") return;
         const dx = other.x - r.x;
         const dy = other.y - r.y;
         const forward = dx * aheadX + dy * aheadY;
@@ -5513,10 +5684,9 @@
         }
         const forwardPressure = 1 - clamp(Math.max(forward, 0) / scanDistance, 0, 1);
         const sidePressure = 1 - clamp(Math.abs(side) / sideWindow, 0, 1);
-        const playerPressure = other.kind === "player" ? 1.75 : 1.28;
-        avoid += direction * (0.32 + forwardPressure * 0.64 + sidePressure * 0.34) * playerPressure;
+        avoid += direction * (0.12 + forwardPressure * 0.24 + sidePressure * 0.16) * 0.82;
       });
-      return clamp(avoid, -0.95, 0.95);
+      return clamp(avoid, -0.20, 0.20);
     }
 
     function cpuBattlePace(r) {
@@ -5530,6 +5700,7 @@
 
     function pushCpuAvoidBias(cpu, other) {
       if (cpu.kind !== "cpu" || cpu.finished) return;
+      if (other.kind !== "cpu") return;
       const progress = nearestTrackProgress(cpu.x, cpu.y);
       const right = tangentAngleAt(progress) + Math.PI / 2;
       const rightX = Math.cos(right);
@@ -5539,9 +5710,9 @@
       if (Math.abs(side) < cpu.radius * 0.35 && cpu.laneBias) {
         away = cpu.laneBias > 0 ? 1 : -1;
       }
-      const strength = other.kind === "player" ? 1.02 : 0.76;
-      const duration = other.kind === "player" ? 98 : 74;
-      cpu.avoidBias = clamp(cpu.avoidBias * 0.20 + away * strength, -1.0, 1.0);
+      const strength = 0.14;
+      const duration = 42;
+      cpu.avoidBias = clamp(cpu.avoidBias * 0.15 + away * strength, -0.22, 0.22);
       cpu.avoidBiasTimer = Math.max(cpu.avoidBiasTimer, duration);
     }
 
@@ -5549,10 +5720,12 @@
       if (r.kind !== "cpu" || r.finished) return;
       r.stuckTimer = Math.abs(r.speed) < 0.55 ? (r.stuckTimer || 0) + scale : 0;
       if (r.stuckTimer < 95) return;
+      const stats = r.debugStats || (r.debugStats = makeCpuDebugStats());
+      stats.stuckCount += 1;
 
       const progress = nearestTrackProgress(r.x, r.y);
       const safeProgress = (progress + 0.012) % 1;
-      const safeLane = clamp(r.laneOffset * 0.22, -0.18, 0.18);
+      const safeLane = clamp(r.laneOffset * 0.12, -0.12, 0.12);
       const safePoint = roadCenterAt(safeProgress, safeLane);
       const safeAngle = tangentAngleAt(safeProgress);
       r.x = safePoint.x;
@@ -5567,7 +5740,16 @@
     }
 
     function handleCourseCollision(r) {
-      if (isOnRoad(r.x, r.y)) return;
+      if (isOnRoad(r.x, r.y)) {
+        r.offroadActive = false;
+        return;
+      }
+      if (r.kind === "cpu") {
+        const stats = r.debugStats || (r.debugStats = makeCpuDebugStats());
+        if (!r.offroadActive) stats.offroadCount += 1;
+        stats.wallHitCount += 1;
+        r.offroadActive = true;
+      }
       const target = nearestTrackPoint(r.x, r.y);
       const dx = target.x - r.x;
       const dy = target.y - r.y;
@@ -5576,11 +5758,12 @@
       const ny = dy / dist;
 
       if (isOnRoad(r.prevX, r.prevY)) {
-        r.x = r.prevX + nx * 8;
-        r.y = r.prevY + ny * 8;
+        r.x = r.prevX + nx * (r.kind === "cpu" ? 4 : 8);
+        r.y = r.prevY + ny * (r.kind === "cpu" ? 4 : 8);
       } else {
-        r.x += nx * Math.min(dist, 24);
-        r.y += ny * Math.min(dist, 24);
+        const pull = r.kind === "cpu" ? 14 : 24;
+        r.x += nx * Math.min(dist, pull);
+        r.y += ny * Math.min(dist, pull);
       }
 
       if (!isOnRoad(r.x, r.y)) {
@@ -5589,8 +5772,8 @@
       }
 
       r.speed *= COURSE.wallBounce * (r.car.offroadPenalty || 0.65);
-      r.moveAngle = angleLerp(r.moveAngle, Math.atan2(ny, nx), 0.35);
-      if (r.kind === "player") playCollisionSound();
+      r.moveAngle = angleLerp(r.moveAngle, Math.atan2(ny, nx), r.kind === "cpu" ? 0.18 : 0.35);
+      if (r.kind === "bolt") playCollisionSound();
     }
 
     function handleRacerContacts() {
@@ -5604,9 +5787,9 @@
           const dist = Math.hypot(dx, dy);
           const minDist = (a.radius + b.radius) * 1.06;
           if (dist > 0 && dist < minDist) {
-            const playerContact = a.kind === "player" || b.kind === "player";
+            const playerContact = a.kind === "bolt" || b.kind === "bolt";
             // Stricter contact: separate cars more clearly and reduce speed more on impact.
-            const push = (minDist - dist) / 2 + (playerContact ? 26 : 18);
+            const push = (minDist - dist) / 2 + (playerContact ? 26 : 8);
             const nx = dx / dist;
             const ny = dy / dist;
             a.x -= nx * push;
@@ -5614,18 +5797,29 @@
             b.x += nx * push;
             b.y += ny * push;
 
-            const bounceDamping = playerContact ? 0.20 : 0.19;
+            const bounceDamping = playerContact ? 0.20 : 0.08;
             const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.38);
             const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.38);
-            a.moveAngle = Math.atan2(-ny, -nx);
-            b.moveAngle = Math.atan2(ny, nx);
-            a.angle = angleLerp(a.angle, a.moveAngle, 0.28);
-            b.angle = angleLerp(b.angle, b.moveAngle, 0.28);
+            if (playerContact) {
+              a.moveAngle = Math.atan2(-ny, -nx);
+              b.moveAngle = Math.atan2(ny, nx);
+              a.angle = angleLerp(a.angle, a.moveAngle, 0.28);
+              b.angle = angleLerp(b.angle, b.moveAngle, 0.28);
+            } else {
+              const aTrackAngle = tangentAngleAt(nearestTrackProgress(a.x, a.y));
+              const bTrackAngle = tangentAngleAt(nearestTrackProgress(b.x, b.y));
+              a.moveAngle = angleLerp(a.moveAngle, aTrackAngle, 0.12);
+              b.moveAngle = angleLerp(b.moveAngle, bTrackAngle, 0.12);
+              a.angle = angleLerp(a.angle, a.moveAngle, 0.16);
+              b.angle = angleLerp(b.angle, b.moveAngle, 0.16);
+            }
+            a.collisionCooldown = Math.max(a.collisionCooldown || 0, 10);
+            b.collisionCooldown = Math.max(b.collisionCooldown || 0, 10);
             a.speed = aBounce;
             b.speed = bBounce;
             pushCpuAvoidBias(a, b);
             pushCpuAvoidBias(b, a);
-            if (a.kind === "player" || b.kind === "player") playCollisionSound();
+            if (a.kind === "bolt" || b.kind === "bolt") playCollisionSound();
           }
         }
       }
@@ -5647,19 +5841,21 @@
         r.lap += 1;
         r.cp1 = false;
         r.cp2 = false;
-        if (r.kind === "player") refillTurbo();
-        if (r.lap >= TOTAL_LAPS && !r.finished) {
-          r.finished = true;
-          r.finishTime = performance.now() - raceStartTime;
-          r.speed = Math.max(r.speed * 0.55, r.car.maxSpeed * 0.45);
-          if (r.kind === "player") finishRace();
-        } else if (r.kind === "player") {
+        if (r.kind === "bolt") refillTurbo();
+          if (r.lap >= TOTAL_LAPS && !r.finished) {
+            r.finished = true;
+            r.finishTime = performance.now() - raceStartTime;
+            if (r.debugStats) r.debugStats.finishLap = r.lap;
+            r.speed = Math.max(r.speed * 0.55, r.car.maxSpeed * 0.45);
+            if (r.kind === "bolt") finishRace();
+        } else if (r.kind === "bolt") {
           blip(760, 0.06, "square", 0.055);
           showRaceToast(`LAP ${r.lap + 1} / ${TOTAL_LAPS}  TURBO FULL`);
           ui.hint.textContent = "Turbo refilled.";
         }
       }
-      r.rankScore = r.lap + r.progress;
+      r.raceDistance = r.lap + r.progress;
+      r.rankScore = r.raceDistance;
     }
 
     function refillTurbo() {
@@ -5683,15 +5879,82 @@
       });
       ordered.forEach((r, index) => {
         r.position = index + 1;
+        if (!Number.isFinite(r.position) || r.position < 1 || r.position > racers.length) {
+          const stats = r.debugStats || (r.debugStats = makeCpuDebugStats());
+          stats.rankError = true;
+        }
       });
+    }
+
+    function cpuTestStatus() {
+      const course = currentCourse();
+      return {
+        course: course.name,
+        courseId: course.id,
+        lap: player ? player.lap + 1 : 1,
+        state,
+        racers: racers.filter(r => r.kind === "cpu").map(r => {
+          const stats = r.debugStats || makeCpuDebugStats();
+          const positionOk = Number.isFinite(r.position) && r.position >= 1 && r.position <= racers.length;
+          return {
+            name: r.name || "CPU",
+            progress: Number((r.progress || 0).toFixed(4)),
+            raceDistance: Number((r.raceDistance || r.rankScore || 0).toFixed(4)),
+            position: r.position || null,
+            offroadCount: stats.offroadCount,
+            wallHitCount: stats.wallHitCount,
+            spinCount: stats.spinCount,
+            maxAngleChange: Number(stats.maxAngleChange.toFixed(4)),
+            stuckCount: stats.stuckCount,
+            finishLap: stats.finishLap || (r.finished ? r.lap : 0),
+            rankError: stats.rankError || !positionOk,
+            finished: !!r.finished
+          };
+        })
+      };
+    }
+
+    async function runCpuLineTest(courseId = selectedCourseId) {
+      const course = COURSES.find(item => item.id === courseId || item.name === courseId) || currentCourse();
+      selectedCourseId = course.id;
+      routeMetricsCache = null;
+      buildWaypoints();
+      resetRaceObjects(true);
+      resetCpuDebugStats();
+      player.finished = true;
+      player.hiddenAfterFinish = true;
+      player.position = racers.length;
+      state = GameState.FINISH;
+      raceStartTime = performance.now();
+      let simTime = raceStartTime;
+      const maxFrames = 12000;
+      for (let frame = 0; frame < maxFrames; frame++) {
+        simTime += 16.666;
+        racers.forEach(r => {
+          if (r.kind === "cpu") updateCpu(r, DRIVE_SPEED_SCALE, simTime);
+        });
+        handleRacerContacts();
+        updateRankings();
+        if (racers.filter(r => r.kind === "cpu").every(r => r.finished)) break;
+        if (frame % 240 === 0) await new Promise(resolve => setTimeout(resolve, 0));
+      }
+      raceElapsed = simTime - raceStartTime;
+      const result = cpuTestStatus();
+      state = GameState.FINISH;
+      renderDirty = true;
+      return result;
     }
 
     // --- Race flow ----------------------------------------------------------
     function startCountdown() {
       initAudio();
       resetRaceObjects(true);
+      if (ui.countdown) {
+        ui.countdown.textContent = "3";
+        ui.countdown.classList.remove("is-visible");
+      }
       countdownStart = performance.now();
-      countdownSoundStep = null;
+      countdownSoundStep = 3;
       lastFrameTime = countdownStart;
       setScreen(GameState.COUNTDOWN);
       ui.hint.textContent = "Get ready.";
@@ -5893,7 +6156,7 @@
     }
 
     function carSpriteSrc(car) {
-      return car.spriteId === "player" ? "assets/cars/red2.png" : `assets/cars/shop/${car.spriteId}.png`;
+      return car.spriteId === "bolt" ? "assets/cars/bolt.png" : `assets/cars/shop/${car.spriteId}.png`;
     }
 
     function showResetConfirm() {
@@ -5952,15 +6215,15 @@
           ? `${selected ? "SEL" : "OWN"}`
           : `${car.cost}P`;
         const garageDisplayNames = {
-          lamborghini: "Lambo",
-          ferrari: "Ferrari",
-          porsche: "Porsche",
-          gtr: "GTR",
-          nsx: "NSX",
-          f1: "F1"
+          vela: "VELA",
+          crux: "CRUX",
+          dart: "DART",
+          nova: "NOVA",
+          aero: "AERO",
+          bolt: "BOLT"
         };
         card.innerHTML = `
-          <img class="garageSprite${car.id === "f1" ? " is-f1" : ""}" src="${car.spriteId === "player" ? "assets/cars/red2.png" : `assets/cars/shop/${car.spriteId}.png`}" alt="">
+          <img class="garageSprite${car.id === "bolt" ? " is-f1" : ""}" src="${car.spriteId === "bolt" ? "assets/cars/bolt.png" : `assets/cars/shop/${car.spriteId}.png`}" alt="">
           <div class="garageName">${garageDisplayNames[car.id] || car.name}</div>
           <div class="garageMeta">${meta}</div>
           <div class="statBars">${carStats(car.id)}</div>
@@ -5988,8 +6251,8 @@
 
     function courseDisplayName(course) {
       const shortNames = {
-        ridgeSwitch: "Ridge",
-        suzukaRhythm: "Suzuka"
+        ridgeSwitch: "RIDGE",
+        suzukaRhythm: "SKY"
       };
       return shortNames[course.id] || course.name;
     }
@@ -6081,13 +6344,52 @@
       if (bgmEnabled) initAudio();
       playMenuSound("confirm");
       setTimeout(() => blip(150, 0.28, "sawtooth", 0.044), 80);
-      setTimeout(() => blip(185, 0.36, "sawtooth", 0.040), 420);
-      setTimeout(() => blip(225, 0.34, "sawtooth", 0.034), 820);
+      setTimeout(() => blip(185, 0.36, "sawtooth", 0.040), 520);
+      setTimeout(() => blip(225, 0.34, "sawtooth", 0.034), 980);
+
+      // PTR v14: slower title car run.
+      // Keep each car's original waiting position/rotation, then slide it left.
+      const titleCars = Array.from(titleScreen.querySelectorAll(".titleCar"));
+      const runAnimations = [];
       titleScreen.classList.add("is-starting");
+
+      titleCars.forEach((car, index) => {
+        const computed = getComputedStyle(car);
+        const baseTransform = computed.transform && computed.transform !== "none"
+          ? computed.transform
+          : "";
+        car.style.opacity = "1";
+        car.style.willChange = "transform, opacity";
+
+        const anim = car.animate(
+          [
+            { transform: baseTransform, opacity: 1, offset: 0 },
+            { transform: `translateX(-28vw) ${baseTransform}`, opacity: 1, offset: 0.22 },
+            { transform: `translateX(-92vw) ${baseTransform}`, opacity: 1, offset: 0.72 },
+            { transform: `translateX(-145vw) ${baseTransform}`, opacity: 0.82, offset: 0.93 },
+            { transform: `translateX(-165vw) ${baseTransform}`, opacity: 0, offset: 1 }
+          ],
+          {
+            duration: 2350,
+            delay: index * 110,
+            easing: "cubic-bezier(.16,.72,.14,1)",
+            fill: "forwards"
+          }
+        );
+        runAnimations.push(anim);
+      });
+
       setTimeout(() => {
         titleScreen.classList.remove("is-starting");
+        runAnimations.forEach(anim => {
+          try { anim.cancel(); } catch (err) {}
+        });
+        titleCars.forEach(car => {
+          car.style.opacity = "";
+          car.style.willChange = "";
+        });
         showGarage();
-      }, 2020);
+      }, 2750);
     }
 
     bindButton("startMenuBtn", playTitleStartSequence, null);
@@ -6501,7 +6803,7 @@
       racers.forEach(r => {
         const px = ox + r.x * scale;
         const py = oy + r.y * scale;
-        ctx.fillStyle = r.kind === "player" ? "#ffef4f" : r.car.bodyColor;
+        ctx.fillStyle = r.kind === "bolt" ? "#ffef4f" : r.car.bodyColor;
         ctx.fillRect(px - 3, py - 3, 6, 6);
         ctx.strokeStyle = "#05070a";
         ctx.lineWidth = 1;
@@ -6540,7 +6842,7 @@
       ctx.translate(r.x, r.y);
       ctx.rotate(r.angle);
 
-      const scale = r.kind === "player" ? 1.36 : 1.18;
+      const scale = r.kind === "bolt" ? 1.36 : 1.18;
       const carType = r.car.id || r.car.type || r.car.name.toLowerCase();
       const isPhoneLandscape = window.matchMedia("(orientation: landscape) and (hover: none) and (pointer: coarse)").matches;
       const mobileVisualScale = isPhoneLandscape ? 1.45 : 1;
@@ -6548,29 +6850,25 @@
       const body = r.car.bodyColor;
       const shade = shadeColor(body, -46);
       const light = shadeColor(body, 50);
-      const carLength = carType === "kart" ? 12 : carType === "f1" ? 16 : 14;
+      const carLength = carType === "kart" ? 12 : carType === "bolt" ? 16 : 14;
 
       function block(x, y, w, h, color) {
         ctx.fillStyle = color;
         ctx.fillRect(Math.round(x * p), Math.round(y * p), Math.round(w * p), Math.round(h * p));
       }
 
-      const spriteKey = r.car.spriteId || (r.kind === "player" ? "player" : undefined);
+      const spriteKey = r.car.spriteId || (r.kind === "bolt" ? "bolt" : undefined);
       const baseSprite = carSprites[spriteKey];
       const sprite = r.car.tintColor ? tintedCarSprite(spriteKey, r.car.tintColor) : baseSprite;
       const spriteReady = sprite && (sprite instanceof HTMLCanvasElement || (sprite.complete && sprite.naturalWidth > 0));
       if (spriteReady) {
-        const f1Sprites = ["player", "red", "blue", "green", "orange", "purple", "black"];
+        const f1Sprites = ["bolt", "red", "blue", "green", "orange", "purple", "black"];
         const spriteWidth = sprite.naturalWidth || sprite.width;
         const spriteHeight = sprite.naturalHeight || sprite.height;
         const drawH = (f1Sprites.includes(spriteKey) ? 96 : 88) * mobileVisualScale;
         const drawW = drawH * (spriteWidth / spriteHeight);
-        ctx.fillStyle = "rgba(0,0,0,.36)";
-        ctx.beginPath();
-        ctx.ellipse(-2, 1, drawH * 0.36, drawW * 0.35, 0, 0, Math.PI * 2);
-        ctx.fill();
         ctx.rotate(-Math.PI / 2);
-        ctx.imageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = true;
         ctx.drawImage(sprite, -drawW / 2, -drawH / 2, drawW, drawH);
         ctx.restore();
         return;
@@ -6725,7 +7023,17 @@
           currentTime: bgmAudio ? bgmAudio.currentTime : null,
           readyState: bgmAudio ? bgmAudio.readyState : null
         };
-      }
+      },
+      cpuTestStatus,
+      resetCpuTestStats() {
+        resetCpuDebugStats();
+        return cpuTestStatus();
+      },
+      runCpuLineTest
+    };
+
+    window.__pcrDebug.courseIds = () => {
+      return COURSES.map(course => ({ id: course.id, name: course.name }));
     };
 
     init();
