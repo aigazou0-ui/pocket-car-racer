@@ -5401,6 +5401,7 @@
         // Visual car size stays the same, with a firm but not excessive collision range.
         radius: kind === "bolt" ? 38 : 36,
         collisionCooldown: 0,
+        activeContacts: new Set(),
         avoidBias: 0,
         avoidBiasTimer: 0,
         laneBias: 0,
@@ -5416,6 +5417,7 @@
         offroadCount: 0,
         wallHitCount: 0,
         spinCount: 0,
+        contactCount: 0,
         maxAngleChange: 0,
         stuckCount: 0,
         finishLap: 0,
@@ -5786,10 +5788,14 @@
           const dy = b.y - a.y;
           const dist = Math.hypot(dx, dy);
           const minDist = (a.radius + b.radius) * 1.06;
+          const contactKey = `${i}:${j}`;
           if (dist > 0 && dist < minDist) {
+            const newContact = !a.activeContacts.has(contactKey);
+            a.activeContacts.add(contactKey);
+            b.activeContacts.add(contactKey);
             const playerContact = a.kind === "bolt" || b.kind === "bolt";
             // Stricter contact: separate cars more clearly and reduce speed more on impact.
-            const push = (minDist - dist) / 2 + (playerContact ? 26 : 8);
+            const push = (minDist - dist) / 2 + (playerContact ? 20 : 8);
             const nx = dx / dist;
             const ny = dy / dist;
             a.x -= nx * push;
@@ -5797,14 +5803,16 @@
             b.x += nx * push;
             b.y += ny * push;
 
-            const bounceDamping = playerContact ? 0.20 : 0.08;
+            const bounceDamping = playerContact ? 0.16 : 0.08;
             const aBounce = Math.max(Math.abs(a.speed) * bounceDamping, 0.38);
             const bBounce = Math.max(Math.abs(b.speed) * bounceDamping, 0.38);
             if (playerContact) {
-              a.moveAngle = Math.atan2(-ny, -nx);
-              b.moveAngle = Math.atan2(ny, nx);
-              a.angle = angleLerp(a.angle, a.moveAngle, 0.28);
-              b.angle = angleLerp(b.angle, b.moveAngle, 0.28);
+              const aContactAngle = a.kind === "cpu" ? tangentAngleAt(nearestTrackProgress(a.x, a.y)) : Math.atan2(-ny, -nx);
+              const bContactAngle = b.kind === "cpu" ? tangentAngleAt(nearestTrackProgress(b.x, b.y)) : Math.atan2(ny, nx);
+              a.moveAngle = angleLerp(a.moveAngle, aContactAngle, a.kind === "cpu" ? 0.16 : 0.22);
+              b.moveAngle = angleLerp(b.moveAngle, bContactAngle, b.kind === "cpu" ? 0.16 : 0.22);
+              a.angle = angleLerp(a.angle, a.moveAngle, 0.22);
+              b.angle = angleLerp(b.angle, b.moveAngle, 0.22);
             } else {
               const aTrackAngle = tangentAngleAt(nearestTrackProgress(a.x, a.y));
               const bTrackAngle = tangentAngleAt(nearestTrackProgress(b.x, b.y));
@@ -5817,9 +5825,20 @@
             b.collisionCooldown = Math.max(b.collisionCooldown || 0, 10);
             a.speed = aBounce;
             b.speed = bBounce;
+            if (newContact && a.kind === "cpu") {
+              const stats = a.debugStats || (a.debugStats = makeCpuDebugStats());
+              stats.contactCount += 1;
+            }
+            if (newContact && b.kind === "cpu") {
+              const stats = b.debugStats || (b.debugStats = makeCpuDebugStats());
+              stats.contactCount += 1;
+            }
             pushCpuAvoidBias(a, b);
             pushCpuAvoidBias(b, a);
             if (a.kind === "bolt" || b.kind === "bolt") playCollisionSound();
+          } else {
+            a.activeContacts.delete(contactKey);
+            b.activeContacts.delete(contactKey);
           }
         }
       }
@@ -5898,11 +5917,13 @@
           const positionOk = Number.isFinite(r.position) && r.position >= 1 && r.position <= racers.length;
           return {
             name: r.name || "CPU",
+            lap: r.lap + 1,
             progress: Number((r.progress || 0).toFixed(4)),
             raceDistance: Number((r.raceDistance || r.rankScore || 0).toFixed(4)),
             position: r.position || null,
             offroadCount: stats.offroadCount,
             wallHitCount: stats.wallHitCount,
+            contactCount: stats.contactCount,
             spinCount: stats.spinCount,
             maxAngleChange: Number(stats.maxAngleChange.toFixed(4)),
             stuckCount: stats.stuckCount,
@@ -5943,6 +5964,24 @@
       state = GameState.FINISH;
       renderDirty = true;
       return result;
+    }
+
+    function finalLineStatus() {
+      return {
+        course: currentCourse().name,
+        courseId: currentCourse().id,
+        racers: racers.filter(r => r.kind === "cpu").map(r => {
+          const line = cpuRacingLine(nearestTrackProgress(r.x, r.y));
+          return {
+            name: r.name || "CPU",
+            progress: Number((r.progress || 0).toFixed(4)),
+            lane: Number((r.cpuLineLane || 0).toFixed(4)),
+            lineLane: Number(line.lane.toFixed(4)),
+            curveStrength: Number(line.strength.toFixed(4)),
+            exitBlend: Number(line.exit.toFixed(4))
+          };
+        })
+      };
     }
 
     // --- Race flow ----------------------------------------------------------
@@ -7035,6 +7074,7 @@
     window.__pcrDebug.courseIds = () => {
       return COURSES.map(course => ({ id: course.id, name: course.name }));
     };
+    window.__pcrDebug.finalLineStatus = finalLineStatus;
 
     init();
 
