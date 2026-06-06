@@ -4114,6 +4114,7 @@
           { x: 0.88, y: 0.30 },
           { x: 0.92, y: 0.52 },
           { x: 0.82, y: 0.66 },
+          { x: 0.94, y: 0.73 },
           { x: 0.90, y: 0.80 }
         ]
       }),
@@ -4130,7 +4131,9 @@
           { x: 0.10, y: 0.80 },
           { x: 0.07, y: 0.60 },
           { x: 0.15, y: 0.40 },
-          { x: 0.34, y: 0.48 },
+          { x: 0.31, y: 0.47 },
+          { x: 0.34, y: 0.43 },
+          { x: 0.33, y: 0.38 },
           { x: 0.25, y: 0.24 },
           { x: 0.38, y: 0.16 },
           { x: 0.55, y: 0.18 },
@@ -4138,6 +4141,7 @@
           { x: 0.82, y: 0.30 },
           { x: 0.93, y: 0.48 },
           { x: 0.86, y: 0.63 },
+          { x: 0.94, y: 0.72 },
           { x: 0.90, y: 0.80 }
         ]
       }),
@@ -4207,6 +4211,7 @@
           { x: 0.76, y: 0.42 },
           { x: 0.90, y: 0.52 },
           { x: 0.82, y: 0.66 },
+          { x: 0.94, y: 0.73 },
           { x: 0.90, y: 0.80 }
         ]
       }),
@@ -4254,8 +4259,10 @@
           { x: 0.76, y: 0.18 },
           { x: 0.92, y: 0.30 },
           { x: 0.86, y: 0.46 },
-          { x: 0.66, y: 0.53 },
+          { x: 0.72, y: 0.50 },
+          { x: 0.74, y: 0.60 },
           { x: 0.82, y: 0.67 },
+          { x: 0.94, y: 0.74 },
           { x: 0.90, y: 0.80 }
         ]
       }),
@@ -4272,7 +4279,9 @@
           { x: 0.10, y: 0.80 },
           { x: 0.08, y: 0.64 },
           { x: 0.20, y: 0.48 },
-          { x: 0.38, y: 0.58 },
+          { x: 0.32, y: 0.55 },
+          { x: 0.38, y: 0.49 },
+          { x: 0.34, y: 0.40 },
           { x: 0.28, y: 0.34 },
           { x: 0.36, y: 0.22 },
           { x: 0.55, y: 0.16 },
@@ -5406,8 +5415,14 @@
         avoidBiasTimer: 0,
         laneBias: 0,
         cpuLineLane: laneOffset * 0.06,
+        overtakeBias: 0,
+        overtakeTimer: 0,
+        overtakeTarget: null,
+        overtakeCooldown: 0,
+        overtakeSuccessTarget: null,
         stuckTimer: 0,
         offroadActive: false,
+        grassZone: "road",
         debugStats: makeCpuDebugStats()
       };
     }
@@ -5418,7 +5433,13 @@
         wallHitCount: 0,
         spinCount: 0,
         contactCount: 0,
+        rearEndContactCount: 0,
+        overtakeAttemptCount: 0,
+        overtakeSuccessCount: 0,
+        grassShallowCount: 0,
+        grassDeepCount: 0,
         maxAngleChange: 0,
+        maxReverseAngle: 0,
         stuckCount: 0,
         finishLap: 0,
         rankError: false
@@ -5429,7 +5450,13 @@
       racers.forEach(r => {
         r.debugStats = makeCpuDebugStats();
         r.offroadActive = false;
+        r.grassZone = "road";
         r.lastDebugAngle = r.moveAngle || r.angle || 0;
+        r.overtakeBias = 0;
+        r.overtakeTimer = 0;
+        r.overtakeTarget = null;
+        r.overtakeCooldown = 0;
+        r.overtakeSuccessTarget = null;
       });
     }
 
@@ -5565,6 +5592,7 @@
       const targetIndex = (nearestIndex + lookAhead) % cpWaypoints.length;
       const targetProgress = targetIndex / cpWaypoints.length;
       const avoidanceLane = cpuAvoidanceLane(r, nearestProgress);
+      const overtakeLane = cpuOvertakeLane(r, nearestProgress);
       if (r.avoidBiasTimer > 0) {
         r.avoidBiasTimer -= scale;
       } else {
@@ -5573,7 +5601,7 @@
       const baseLane = r.laneOffset * 0.055 + (r.laneBias || 0) * 0.035;
       const desiredLineLane = clamp(baseLane + line.lane + wobble * 0.014, -0.38, 0.38);
       r.cpuLineLane = lerp(r.cpuLineLane || 0, desiredLineLane, clamp((0.038 + curveStrength * 0.025) * scale, 0, 0.13));
-      const targetLane = clamp(r.cpuLineLane + avoidanceLane + r.avoidBias, -0.44, 0.44);
+      const targetLane = clamp(r.cpuLineLane + avoidanceLane + overtakeLane + r.avoidBias, -0.44, 0.44);
       const target = roadCenterAt(targetProgress, targetLane);
       const targetAngle = angleToPoint(r, target);
       const upcomingTurn = angleDistance(tangentAngleAt(nearestProgress), tangentAngleAt(targetProgress));
@@ -5640,6 +5668,8 @@
       if (r.collisionCooldown > 0) return;
       const stats = r.debugStats || (r.debugStats = makeCpuDebugStats());
       stats.maxAngleChange = Math.max(stats.maxAngleChange, delta);
+      const trackAngle = tangentAngleAt(nearestTrackProgress(r.x, r.y));
+      stats.maxReverseAngle = Math.max(stats.maxReverseAngle, angleDistance(r.moveAngle || r.angle, trackAngle));
       if (delta > 0.72) stats.spinCount += 1;
     }
 
@@ -5689,6 +5719,86 @@
         avoid += direction * (0.12 + forwardPressure * 0.24 + sidePressure * 0.16) * 0.82;
       });
       return clamp(avoid, -0.20, 0.20);
+    }
+
+    function cpuOvertakeLane(r, progress) {
+      if (r.kind !== "cpu" || r.finished) return 0;
+      const stats = r.debugStats || (r.debugStats = makeCpuDebugStats());
+      if (r.overtakeCooldown > 0) r.overtakeCooldown -= 1;
+      const d = courseDims();
+      const tangent = tangentAngleAt(progress);
+      const aheadX = Math.cos(tangent);
+      const aheadY = Math.sin(tangent);
+      const rightX = Math.cos(tangent + Math.PI / 2);
+      const rightY = Math.sin(tangent + Math.PI / 2);
+      const scanDistance = d.roadWidth * 2.55;
+      const sideWindow = d.roadWidth * 0.58;
+      let target = null;
+      let bestForward = Infinity;
+
+      racers.forEach(other => {
+        if (other === r || other.finished) return;
+        const dx = other.x - r.x;
+        const dy = other.y - r.y;
+        const forward = dx * aheadX + dy * aheadY;
+        const side = dx * rightX + dy * rightY;
+        if (forward <= r.radius * 0.25 || forward > scanDistance || Math.abs(side) > sideWindow) return;
+        if (r.speed <= other.speed + 0.12) return;
+        if (forward < bestForward) {
+          bestForward = forward;
+          target = { racer: other, side, forward };
+        }
+      });
+
+      if (!target) {
+        if (r.overtakeTarget) {
+          const oldTarget = racers.find(other => (other.name || other.kind) === r.overtakeTarget);
+          if (oldTarget && r.raceDistance > (oldTarget.raceDistance || oldTarget.rankScore || 0) + 0.018 && r.overtakeSuccessTarget !== r.overtakeTarget) {
+            stats.overtakeSuccessCount += 1;
+            r.overtakeSuccessTarget = r.overtakeTarget;
+          }
+        }
+        r.overtakeTimer = Math.max(0, (r.overtakeTimer || 0) - 1);
+        r.overtakeBias = lerp(r.overtakeBias || 0, 0, 0.035);
+        if (r.overtakeTimer <= 0 && Math.abs(r.overtakeBias || 0) < 0.015) {
+          r.overtakeTarget = null;
+          r.overtakeSuccessTarget = null;
+        }
+        return clamp(r.overtakeBias || 0, -0.20, 0.20);
+      }
+
+      const targetId = target.racer.name || target.racer.kind;
+      if (r.overtakeTarget !== targetId && r.overtakeCooldown <= 0) {
+        stats.overtakeAttemptCount += 1;
+        r.overtakeCooldown = 75;
+        r.overtakeSuccessTarget = null;
+      }
+      r.overtakeTarget = targetId;
+      r.overtakeTimer = 95;
+
+      const preferred = target.side >= 0 ? -1 : 1;
+      const alternate = -preferred;
+      const sideClearance = sign => {
+        let score = 0;
+        racers.forEach(other => {
+          if (other === r || other.finished) return;
+          const dx = other.x - r.x;
+          const dy = other.y - r.y;
+          const forward = dx * aheadX + dy * aheadY;
+          const side = dx * rightX + dy * rightY;
+          if (forward < -r.radius * 0.6 || forward > scanDistance * 1.08) return;
+          const laneSide = sign * d.roadWidth * 0.24;
+          const sideGap = Math.abs(side - laneSide);
+          if (sideGap < d.roadWidth * 0.36) score += 1 + (1 - clamp(forward / scanDistance, 0, 1));
+        });
+        return score;
+      };
+      let direction = sideClearance(preferred) <= sideClearance(alternate) ? preferred : alternate;
+      if (Math.abs(target.side) < r.radius * 0.35 && r.laneBias) direction = r.laneBias > 0 ? 1 : -1;
+      const pressure = 1 - clamp(target.forward / scanDistance, 0, 1);
+      const desiredBias = direction * clamp(0.10 + pressure * 0.10, 0.10, 0.20);
+      r.overtakeBias = lerp(r.overtakeBias || 0, desiredBias, 0.045);
+      return clamp(r.overtakeBias, -0.20, 0.20);
     }
 
     function cpuBattlePace(r) {
@@ -5744,38 +5854,77 @@
     function handleCourseCollision(r) {
       if (isOnRoad(r.x, r.y)) {
         r.offroadActive = false;
+        r.grassZone = "road";
         return;
       }
+      const d = courseDims();
+      const routeDistance = distanceToRoute(r.x, r.y);
+      const outside = Math.max(0, routeDistance - d.roadWidth / 2);
+      const outsideRatio = clamp(outside / d.roadWidth, 0, 1);
+      const zone = outsideRatio > 0.30 ? "deep" : outsideRatio > 0.13 ? "medium" : "shallow";
       if (r.kind === "cpu") {
         const stats = r.debugStats || (r.debugStats = makeCpuDebugStats());
         if (!r.offroadActive) stats.offroadCount += 1;
-        stats.wallHitCount += 1;
+        if (zone === "shallow" && r.grassZone !== "shallow") stats.grassShallowCount += 1;
+        if (zone === "deep" && r.grassZone !== "deep") {
+          stats.grassDeepCount += 1;
+          stats.wallHitCount += 1;
+        } else if (zone === "medium" && r.grassZone === "road") {
+          stats.grassShallowCount += 1;
+        }
         r.offroadActive = true;
       }
+      r.grassZone = zone;
       const target = nearestTrackPoint(r.x, r.y);
       const dx = target.x - r.x;
       const dy = target.y - r.y;
       const dist = Math.hypot(dx, dy) || 1;
       const nx = dx / dist;
       const ny = dy / dist;
+      const roadAngle = tangentAngleAt(nearestTrackProgress(r.x, r.y));
+      const isCpu = r.kind === "cpu";
+      const zoneTune = zone === "shallow"
+        ? { pull: isCpu ? 1.8 : 2.6, speed: 0.66, align: isCpu ? 0.055 : 0.075 }
+        : zone === "medium"
+          ? { pull: isCpu ? 5.2 : 7.5, speed: 0.50, align: isCpu ? 0.085 : 0.11 }
+          : { pull: isCpu ? 10.5 : 16.0, speed: 0.38, align: isCpu ? 0.12 : 0.18 };
 
-      if (isOnRoad(r.prevX, r.prevY)) {
-        r.x = r.prevX + nx * (r.kind === "cpu" ? 4 : 8);
-        r.y = r.prevY + ny * (r.kind === "cpu" ? 4 : 8);
+      if (zone === "deep" && isOnRoad(r.prevX, r.prevY)) {
+        r.x = r.prevX + nx * (isCpu ? 3.2 : 5.5);
+        r.y = r.prevY + ny * (isCpu ? 3.2 : 5.5);
       } else {
-        const pull = r.kind === "cpu" ? 14 : 24;
-        r.x += nx * Math.min(dist, pull);
-        r.y += ny * Math.min(dist, pull);
+        r.x += nx * Math.min(dist, zoneTune.pull);
+        r.y += ny * Math.min(dist, zoneTune.pull);
       }
 
-      if (!isOnRoad(r.x, r.y)) {
-        r.x = target.x;
-        r.y = target.y;
+      if (zone === "deep" && outsideRatio > 0.62 && !isOnRoad(r.x, r.y)) {
+        r.x = lerp(r.x, target.x, 0.35);
+        r.y = lerp(r.y, target.y, 0.35);
       }
 
-      r.speed *= COURSE.wallBounce * (r.car.offroadPenalty || 0.65);
-      r.moveAngle = angleLerp(r.moveAngle, Math.atan2(ny, nx), r.kind === "cpu" ? 0.18 : 0.35);
+      r.speed *= zoneTune.speed * (r.car.offroadPenalty || 0.65);
+      r.moveAngle = angleLerp(r.moveAngle, isCpu ? roadAngle : angleLerp(roadAngle, Math.atan2(ny, nx), 0.35), zoneTune.align);
+      r.angle = angleLerp(r.angle, r.moveAngle, isCpu ? 0.08 : 0.12);
       if (r.kind === "bolt") playCollisionSound();
+    }
+
+    function recordCpuContactStats(cpu, other, newContact) {
+      if (!newContact || cpu.kind !== "cpu") return;
+      const stats = cpu.debugStats || (cpu.debugStats = makeCpuDebugStats());
+      stats.contactCount += 1;
+      const progress = nearestTrackProgress(cpu.x, cpu.y);
+      const tangent = tangentAngleAt(progress);
+      const aheadX = Math.cos(tangent);
+      const aheadY = Math.sin(tangent);
+      const rightX = Math.cos(tangent + Math.PI / 2);
+      const rightY = Math.sin(tangent + Math.PI / 2);
+      const dx = other.x - cpu.x;
+      const dy = other.y - cpu.y;
+      const forward = dx * aheadX + dy * aheadY;
+      const side = Math.abs(dx * rightX + dy * rightY);
+      if (forward > cpu.radius * 0.20 && side < cpu.radius * 1.15) {
+        stats.rearEndContactCount += 1;
+      }
     }
 
     function handleRacerContacts() {
@@ -5825,14 +5974,8 @@
             b.collisionCooldown = Math.max(b.collisionCooldown || 0, 10);
             a.speed = aBounce;
             b.speed = bBounce;
-            if (newContact && a.kind === "cpu") {
-              const stats = a.debugStats || (a.debugStats = makeCpuDebugStats());
-              stats.contactCount += 1;
-            }
-            if (newContact && b.kind === "cpu") {
-              const stats = b.debugStats || (b.debugStats = makeCpuDebugStats());
-              stats.contactCount += 1;
-            }
+            recordCpuContactStats(a, b, newContact);
+            recordCpuContactStats(b, a, newContact);
             pushCpuAvoidBias(a, b);
             pushCpuAvoidBias(b, a);
             if (a.kind === "bolt" || b.kind === "bolt") playCollisionSound();
@@ -5924,12 +6067,78 @@
             offroadCount: stats.offroadCount,
             wallHitCount: stats.wallHitCount,
             contactCount: stats.contactCount,
+            rearEndContactCount: stats.rearEndContactCount,
             spinCount: stats.spinCount,
+            overtakeAttemptCount: stats.overtakeAttemptCount,
+            overtakeSuccessCount: stats.overtakeSuccessCount,
+            grassShallowCount: stats.grassShallowCount,
+            grassDeepCount: stats.grassDeepCount,
             maxAngleChange: Number(stats.maxAngleChange.toFixed(4)),
+            maxReverseAngle: Number((stats.maxReverseAngle || 0).toFixed(4)),
             stuckCount: stats.stuckCount,
             finishLap: stats.finishLap || (r.finished ? r.lap : 0),
             rankError: stats.rankError || !positionOk,
             finished: !!r.finished
+          };
+        })
+      };
+    }
+
+    function routeCornerAnalysis(course) {
+      const route = course.route || [];
+      if (route.length < 4) return [];
+      const last = route[route.length - 1];
+      const first = route[0];
+      const hasClosingDuplicate = Math.abs(last.x - first.x) < 0.0001 && Math.abs(last.y - first.y) < 0.0001;
+      const points = hasClosingDuplicate ? route.slice(0, -1) : route.slice();
+      const lengths = [];
+      let total = 0;
+      for (let i = 0; i < points.length; i++) {
+        const a = points[i];
+        const b = points[(i + 1) % points.length];
+        const length = Math.hypot(b.x - a.x, b.y - a.y);
+        lengths.push(length);
+        total += length;
+      }
+      let cumulative = 0;
+      const corners = [];
+      for (let i = 0; i < points.length; i++) {
+        const prev = points[(i - 1 + points.length) % points.length];
+        const point = points[i];
+        const next = points[(i + 1) % points.length];
+        const inAngle = Math.atan2(point.y - prev.y, point.x - prev.x);
+        const outAngle = Math.atan2(next.y - point.y, next.x - point.x);
+        const signedTurn = signedAngleDelta(inAngle, outAngle);
+        const severity = Math.abs(signedTurn);
+        if (severity > 0.72) {
+          corners.push({
+            index: i,
+            progress: Number((cumulative / total).toFixed(4)),
+            x: Number(point.x.toFixed(3)),
+            y: Number(point.y.toFixed(3)),
+            turnRadians: Number(signedTurn.toFixed(4)),
+            turnDegrees: Number((signedTurn * 180 / Math.PI).toFixed(1)),
+            severity: Number(severity.toFixed(4)),
+            risk: severity > 1.75 ? "high" : severity > 1.35 ? "medium" : "low",
+            finalCorner: i === 0
+          });
+        }
+        cumulative += lengths[i];
+      }
+      return corners.sort((a, b) => b.severity - a.severity);
+    }
+
+    function sharpCornerStatus() {
+      return {
+        course: currentCourse().name,
+        courses: COURSES.map(course => {
+          const corners = routeCornerAnalysis(course);
+          return {
+            course: course.name,
+            courseId: course.id,
+            highRiskCount: corners.filter(corner => corner.risk === "high").length,
+            finalCorner: corners.find(corner => corner.finalCorner) || null,
+            corners
           };
         })
       };
@@ -5979,6 +6188,42 @@
             lineLane: Number(line.lane.toFixed(4)),
             curveStrength: Number(line.strength.toFixed(4)),
             exitBlend: Number(line.exit.toFixed(4))
+          };
+        })
+      };
+    }
+
+    function overtakeStatus() {
+      return {
+        course: currentCourse().name,
+        racers: racers.filter(r => r.kind === "cpu").map(r => {
+          const stats = r.debugStats || makeCpuDebugStats();
+          return {
+            name: r.name || "CPU",
+            progress: Number((r.progress || 0).toFixed(4)),
+            overtakeBias: Number((r.overtakeBias || 0).toFixed(4)),
+            overtakeTarget: r.overtakeTarget || null,
+            overtakeAttemptCount: stats.overtakeAttemptCount,
+            overtakeSuccessCount: stats.overtakeSuccessCount,
+            rearEndContactCount: stats.rearEndContactCount,
+            contactCount: stats.contactCount
+          };
+        })
+      };
+    }
+
+    function grassContactStatus() {
+      return {
+        course: currentCourse().name,
+        racers: racers.filter(r => r.kind === "cpu").map(r => {
+          const stats = r.debugStats || makeCpuDebugStats();
+          return {
+            name: r.name || "CPU",
+            grassZone: r.grassZone || "road",
+            offroadCount: stats.offroadCount,
+            grassShallowCount: stats.grassShallowCount,
+            grassDeepCount: stats.grassDeepCount,
+            wallHitCount: stats.wallHitCount
           };
         })
       };
@@ -7064,6 +7309,9 @@
         };
       },
       cpuTestStatus,
+      sharpCornerStatus,
+      overtakeStatus,
+      grassContactStatus,
       resetCpuTestStats() {
         resetCpuDebugStats();
         return cpuTestStatus();

@@ -1,4 +1,4 @@
-const CACHE_NAME = "pocket-turbo-racer-v18q-cpu-contact-grass-racing-line-test";
+const CACHE_NAME = "pocket-turbo-racer-v18s-sharp-corner-grass-overtake-minimal-fix";
 const CORE_ASSETS = [
   "./",
   "./index.html",
